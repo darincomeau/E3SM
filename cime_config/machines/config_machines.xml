@@ -1130,18 +1130,10 @@
         <command name="rm">cray-parallel-netcdf</command>
       </modules>
 
-      <modules compiler="intel">
-        <command name="load">PrgEnv-intel/8.0.0</command>
-        <command name="rm">intel</command>
-        <command name="load">intel/2021.3.0</command>
-        <command name="rm">cray-mpich</command>
-        <command name="load">cray-mpich/8.1.9</command>
-        <command name="load">cray-pals/1.0.17</command>
-        <command name="load">cray-netcdf/4.7.4.4</command>
-        <command name="load">cray-hdf5/1.12.0.4</command>
-        <command name="load">cray-parallel-netcdf/1.12.1.4</command>
-        <command name="rm">cray-libsci</command>
-        <command name="load">cmake/3.21.4</command>
+      <modules>
+        <command name="rm">cmake</command>
+        <command name="load">cmake</command>
+        <command name="load">perl5-extras</command>
       </modules>
     </module_system>
     <RUNDIR>$CIME_OUTPUT_ROOT/$CASE/run</RUNDIR>
@@ -1224,19 +1216,42 @@
         <command name="rm">cray-hdf5-parallel</command>
         <command name="rm">cray-netcdf</command>
         <command name="rm">cray-netcdf-hdf5parallel</command>
-        <command name="rm">cray-parallel-netcdf</command>
+        <command name="rm">cray-libsci</command>
+        <command name="rm">papi</command>
+        <command name="rm">cmake</command>
+        <command name="rm">cray-petsc</command>
+        <command name="rm">esmf</command>
+        <command name="rm">zlib</command>
+        <command name="rm">craype-hugepages2M</command>
+        <command name="rm">darshan</command>
+        
+        <!-- first load basic defaults, then remove/swap/load as necessary -->
+        <command name="load">craype</command>
+        <command name="load">PrgEnv-intel</command>
+        <command name="load">cray-mpich</command>
+        <command name="rm">craype-haswell</command>
+        <command name="load">craype-mic-knl</command>
+      </modules>
+
+      <modules mpilib="mpt">
+        <command name="swap">cray-mpich cray-mpich/7.7.10</command>
+      </modules>
+
+      <modules mpilib="impi">
+        <command name="swap">cray-mpich impi/2020.up4</command>
       </modules>
 
       <modules compiler="intel">
-        <command name="load">PrgEnv-intel/8.0.0</command>
+        <command name="load">PrgEnv-intel/6.0.10</command>
         <command name="rm">intel</command>
-        <command name="load">intel/2021.3.0</command>
-        <command name="rm">cray-mpich</command>
-        <command name="load">cray-mpich/8.1.9</command>
-        <command name="load">cray-pals/1.0.17</command>
-        <command name="load">cray-netcdf/4.7.4.4</command>
-        <command name="load">cray-hdf5/1.12.0.4</command>
-        <command name="load">cray-parallel-netcdf/1.12.1.4</command>
+        <command name="load">intel/19.0.3.199</command>
+      </modules>
+
+      <modules compiler="gnu">
+        <command name="swap">PrgEnv-intel PrgEnv-gnu/6.0.10</command>
+        <command name="rm">gcc</command>
+        <command name="load">gcc/10.3.0</command>
+>>>>>>> f808a5b692... Update Cori machine files after March 2022 maintenence
         <command name="rm">cray-libsci</command>
         <command name="load">cmake/3.21.4</command>
       </modules>
@@ -1264,10 +1279,8 @@
       </modules>
 
       <modules>
-        <command name="rm">git</command>
-	<command name="load">git</command>
         <command name="rm">cmake</command>
-        <command name="load">cmake/3.21.3</command>
+        <command name="load">cmake</command>
         <command name="load">perl5-extras</command>
       </modules>
 
