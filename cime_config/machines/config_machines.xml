@@ -1251,7 +1251,6 @@
         <command name="swap">PrgEnv-intel PrgEnv-gnu/6.0.10</command>
         <command name="rm">gcc</command>
         <command name="load">gcc/10.3.0</command>
->>>>>>> f808a5b692... Update Cori machine files after March 2022 maintenence
         <command name="rm">cray-libsci</command>
         <command name="load">cmake/3.21.4</command>
       </modules>
