@@ -2463,7 +2463,7 @@
     </mach>
   </grid>
   <grid name="a%T62.+oi%oARRM60to10|a%TL319.+oi%oARRM60to10">
-    <mach name="onyx">
+    <mach name="onyx|warhawk|blackbird">
       <pes compset=".*MPASCICE.+MPASO.+|.*MPASSI.+MPASO.+" pesize="any">
         <comment>none</comment>
         <ntasks>
@@ -2500,7 +2500,7 @@
     </mach>
   </grid>
   <grid name="a%T62.+oi%oARRM60to6|a%TL319.+oi%oARRM60to6">
-    <mach name="onyx">
+    <mach name="onyx|warhawk|blackbird">
       <pes compset=".*MPASCICE.+MPASO.+" pesize="any">
         <comment>none</comment>
         <ntasks>
@@ -2537,7 +2537,7 @@
     </mach>
   </grid>
   <grid name="a%ne30.+oi%oARRM60to10">
-    <mach name="onyx">
+    <mach name="onyx|warhawk|blackbird">
       <pes compset=".*EAM.+ELM.+MPASSI.+MPASO.+MOSART.*" pesize="any">
         <comment>none</comment>
         <ntasks>
