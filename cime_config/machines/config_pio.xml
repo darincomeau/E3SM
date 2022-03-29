@@ -281,6 +281,18 @@
     </values>
   </entry>
 
+  <entry id="CPL_PIO_TYPENAME">
+    <values>
+      <value mach="warhawk" >netcdf</value>
+    </values>
+  </entry>
+
+  <entry id="CPL_PIO_TYPENAME">
+    <values>
+      <value mach="blackbird" >netcdf</value>
+    </values>
+  </entry>
+
   <!--- uncomment and fill in relevant sections
   <entry id="GLC_PIO_STRIDE">
     <values>
