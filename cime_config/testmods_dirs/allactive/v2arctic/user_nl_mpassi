@@ -15,5 +15,4 @@
 ! SourceMods/src.mpassi/streams.seaice
 !----------------------------------------------------------------------------------
 
-! config_block_decomp_file_prefix = '/global/cfs/cdirs/e3sm/inputdata/ice/mpas-cice/oARRM60to10/mpas-seaice.graph.v2.190129.part.'
-! config_nSnowLayers = 1
+! config_ratio_ridging_work_to_PE = 34.0
