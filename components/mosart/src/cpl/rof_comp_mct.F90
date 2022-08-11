@@ -21,10 +21,12 @@ module rof_comp_mct
                                 seq_infodata_start_type_start, seq_infodata_start_type_cont,   &
                                 seq_infodata_start_type_brnch
   use seq_comm_mct     , only : seq_comm_suffix, seq_comm_inst, seq_comm_name
-  use RunoffMod        , only : rtmCTL, TRunoff, THeat, TUnit
+  use RunoffMod        , only : rtmCTL, TRunoff, THeat, TUnit, Tctl
   use RtmVar           , only : rtmlon, rtmlat, ice_runoff, iulog, &
                                 nsrStartup, nsrContinue, nsrBranch, & 
-                                inst_index, inst_suffix, inst_name, RtmVarSet, wrmflag, heatflag
+                                inst_index, inst_suffix, inst_name, RtmVarSet, &
+                                wrmflag, heatflag, data_bgc_fluxes_to_ocean_flag, &
+                                inundflag, use_lnd_rof_two_way
   use RtmSpmd          , only : masterproc, mpicom_rof, npes, iam, RtmSpmdInit, ROFID
   use RtmMod           , only : Rtmini, Rtmrun
   use RtmTimeManager   , only : timemgr_setup, get_curr_date, get_step_size
@@ -45,9 +47,17 @@ module rof_comp_mct
                                 index_x2r_Faxa_swndr, index_x2r_Faxa_swndf, &
                                 index_r2x_Forr_rofl, index_r2x_Forr_rofi, &
                                 index_r2x_Flrr_flood, &
+                                index_r2x_Forr_rofDIN, index_r2x_Forr_rofDIP, &
+                                index_r2x_Forr_rofDON, index_r2x_Forr_rofDOP, &
+                                index_r2x_Forr_rofDOC, index_r2x_Forr_rofPP , &
+                                index_r2x_Forr_rofDSi, index_r2x_Forr_rofPOC, &
+                                index_r2x_Forr_rofPN , index_r2x_Forr_rofDIC, &
+                                index_r2x_Forr_rofFe , &
                                 index_r2x_Flrr_volr, index_r2x_Flrr_volrmch, &
                                 index_x2r_coszen_str, &
-                                index_r2x_Flrr_supply, index_r2x_Flrr_deficit
+                                index_r2x_Flrr_supply, index_r2x_Flrr_deficit, &
+                                index_r2x_Sr_h2orof, index_r2x_Sr_frac_h2orof, &
+                                index_x2r_Flrl_inundinf
 
   use mct_mod
   use ESMF
@@ -237,6 +247,8 @@ contains
                    nsrest_in=nsrest, version_in=version,           &
                    hostname_in=hostname, username_in=username)
 
+    use_lnd_rof_two_way = lnd_rof_two_way
+    
     ! Read namelist, grid and surface data
     call Rtmini(rtm_active=rof_prognostic,flood_active=flood_present)
 
@@ -625,6 +637,11 @@ contains
           THeat%forc_vp(n)   = shum * THeat%forc_pbot(n)  / (0.622_r8 + 0.378_r8 * shum)
           THeat%coszen(n)    = x2r_r%rAttr(index_x2r_coszen_str,n2)
        end if
+
+       if (index_x2r_Flrl_inundinf > 0) then
+          rtmCTL%inundinf(n) = x2r_r%rAttr(index_x2r_Flrl_inundinf,n2) * (rtmCTL%area(n)*0.001_r8)
+       endif
+
     enddo
 
   end subroutine rof_import_mct
@@ -646,6 +663,7 @@ contains
     integer :: ni, n, nt, nliq, nfrz
     logical,save :: first_time = .true.
     character(len=32), parameter :: sub = 'rof_export_mct'
+    real(R8) :: tmp1
     !---------------------------------------------------------------------------
     
     nliq = 0
@@ -693,6 +711,22 @@ contains
                 write(iulog,*) sub, ' : ERROR runoff count',n,ni
                 call shr_sys_abort( sub//' : ERROR runoff > expected' )
              endif
+! note runoff has already been divided by area so do not need to do it again for nutrient flux
+             if (data_bgc_fluxes_to_ocean_flag) then
+               tmp1 = r2x_r%rAttr(index_r2x_Forr_rofl,ni)
+               r2x_r%rAttr(index_r2x_Forr_rofDIN,ni) =  tmp1*rtmCTL%concDIN(n)
+               r2x_r%rAttr(index_r2x_Forr_rofDIP,ni) =  tmp1*rtmCTL%concDIP(n)
+               r2x_r%rAttr(index_r2x_Forr_rofDON,ni) =  tmp1*rtmCTL%concDON(n)
+               r2x_r%rAttr(index_r2x_Forr_rofDOP,ni) =  tmp1*rtmCTL%concDOP(n)
+               r2x_r%rAttr(index_r2x_Forr_rofDOC,ni) =  tmp1*rtmCTL%concDOC(n)
+               r2x_r%rAttr(index_r2x_Forr_rofPP ,ni) =  tmp1*rtmCTL%concPP(n)
+               r2x_r%rAttr(index_r2x_Forr_rofDSi,ni) =  tmp1*rtmCTL%concDSi(n)
+               r2x_r%rAttr(index_r2x_Forr_rofPOC,ni) =  tmp1*rtmCTL%concPOC(n)
+               r2x_r%rAttr(index_r2x_Forr_rofPN ,ni) =  tmp1*rtmCTL%concPN(n)
+               r2x_r%rAttr(index_r2x_Forr_rofDIC,ni) =  tmp1*rtmCTL%concDIC(n)
+               r2x_r%rAttr(index_r2x_Forr_rofFe,ni)  =  tmp1*rtmCTL%concFe(n)
+             end if
+
           endif
        end do
     else
@@ -708,6 +742,21 @@ contains
                 write(iulog,*) sub, ' : ERROR runoff count',n,ni
                 call shr_sys_abort( sub//' : ERROR runoff > expected' )
              endif
+! note runoff has already been divided by area so do not need to do it again for nutrient flux
+             if (data_bgc_fluxes_to_ocean_flag) then
+               tmp1 = r2x_r%rAttr(index_r2x_Forr_rofl,ni)
+               r2x_r%rAttr(index_r2x_Forr_rofDIN,ni) =  tmp1*rtmCTL%concDIN(n)
+               r2x_r%rAttr(index_r2x_Forr_rofDIP,ni) =  tmp1*rtmCTL%concDIP(n)
+               r2x_r%rAttr(index_r2x_Forr_rofDON,ni) =  tmp1*rtmCTL%concDON(n)
+               r2x_r%rAttr(index_r2x_Forr_rofDOP,ni) =  tmp1*rtmCTL%concDOP(n)
+               r2x_r%rAttr(index_r2x_Forr_rofDOC,ni) =  tmp1*rtmCTL%concDOC(n)
+               r2x_r%rAttr(index_r2x_Forr_rofPP ,ni) =  tmp1*rtmCTL%concPP(n)
+               r2x_r%rAttr(index_r2x_Forr_rofDSi,ni) =  tmp1*rtmCTL%concDSi(n)
+               r2x_r%rAttr(index_r2x_Forr_rofPOC,ni) =  tmp1*rtmCTL%concPOC(n)
+               r2x_r%rAttr(index_r2x_Forr_rofPN ,ni) =  tmp1*rtmCTL%concPN(n)
+               r2x_r%rAttr(index_r2x_Forr_rofDIC,ni) =  tmp1*rtmCTL%concDIC(n)
+               r2x_r%rAttr(index_r2x_Forr_rofFe,ni)  =  tmp1*rtmCTL%concFe(n)
+             end if
           endif
        end do
     end if
@@ -727,6 +776,15 @@ contains
           r2x_r%rattr(index_r2x_Flrr_deficit,ni)  = (abs(rtmCTL%qdem(n,nliq)) - abs(StorWater%Supply(n))) / (rtmCTL%area(n)*0.001_r8)   !send deficit back to ELM
        endif
     end do
+
+    if ( index_r2x_Sr_h2orof > 0 ) then
+      ni = 0
+      do n = rtmCTL%begr, rtmCTL%endr
+        ni = ni + 1
+        r2x_r%rattr(index_r2x_Sr_h2orof,ni)      = rtmCTL%inundwf(n) / (rtmCTL%area(n)*0.001_r8) ! m^3 to mm
+        r2x_r%rattr(index_r2x_Sr_frac_h2orof,ni) = rtmCTL%inundff(n)
+      enddo
+    endif
 
   end subroutine rof_export_mct
 

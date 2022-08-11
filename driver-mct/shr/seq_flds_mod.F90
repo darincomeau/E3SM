@@ -154,6 +154,8 @@ module seq_flds_mod
   character(len=CS)  :: atm_flux_method     ! explicit => no extra fields needed
                                             ! implicit_stress => atm provides wsresp and tau_est
   logical            :: atm_gustiness       ! .true. if the atmosphere model produces gustiness
+  logical            :: rof2ocn_nutrients   ! .true. if the runoff model passes nutrient fields to the ocn
+  logical            :: lnd_rof_two_way     ! .true. if land-river two-way coupling turned on
 
   !----------------------------------------------------------------------------
   ! metadata
@@ -372,7 +374,8 @@ contains
     namelist /seq_cplflds_inparm/  &
          flds_co2a, flds_co2b, flds_co2c, flds_co2_dmsa, flds_wiso, glc_nec, &
          ice_ncat, seq_flds_i2o_per_cat, flds_bgc_oi, &
-         nan_check_component_fields, rof_heat, atm_flux_method, atm_gustiness
+         nan_check_component_fields, rof_heat, atm_flux_method, atm_gustiness, &
+         rof2ocn_nutrients, lnd_rof_two_way
 
     ! user specified new fields
     integer,  parameter :: nfldmax = 200
@@ -410,6 +413,8 @@ contains
        rof_heat = .false.
        atm_flux_method = 'explicit'
        atm_gustiness = .false.
+       rof2ocn_nutrients = .false.
+       lnd_rof_two_way   = .false.
 
        unitn = shr_file_getUnit()
        write(logunit,"(A)") subname//': read seq_cplflds_inparm namelist from: '&
@@ -439,6 +444,8 @@ contains
     call shr_mpi_bcast(rof_heat    , mpicom)
     call shr_mpi_bcast(atm_flux_method, mpicom)
     call shr_mpi_bcast(atm_gustiness, mpicom)
+    call shr_mpi_bcast(rof2ocn_nutrients, mpicom)
+    call shr_mpi_bcast(lnd_rof_two_way,   mpicom)
 
     call glc_elevclass_init(glc_nec)
 
@@ -1387,6 +1394,13 @@ contains
     attname  = 'Faxx_evap'
     call metadata_set(attname, longname, stdname, units)
 
+    call seq_flds_add(l2x_states,"Flrl_wslake")
+    longname = 'Lake water storage flux'
+    stdname  = 'lake_water_storage_flux'
+    units    = 'kg m-2 s-1'
+    attname  = 'Flrl_wslake'
+    call metadata_set(attname, longname, stdname, units)
+
     ! Dust flux (particle bin number 1)
     call seq_flds_add(l2x_fluxes,"Fall_flxdst1")
     call seq_flds_add(x2a_fluxes,"Fall_flxdst1")
@@ -2140,27 +2154,6 @@ contains
        call metadata_set(attname, longname, stdname, units)
     endif
 
-    ! Currently only the CESM land and runoff models treat irrigation as a separate
-    ! field: in E3SM, this field is folded in to the other runoff fields. Eventually,
-    ! E3SM may want to update its land and runoff models to map irrigation specially, as
-    ! CESM does.
-    !
-    ! (Once E3SM is using this irrigation field, all that needs to be done is to remove
-    ! this conditional: Code in other places in the coupler is written to trigger off of
-    ! whether Flrl_irrig has been added to the field list, so it should Just Work if this
-    ! conditional is removed.)
-    if (trim(cime_model) == 'cesm') then
-       ! Irrigation flux (land/rof only)
-       call seq_flds_add(l2x_fluxes,"Flrl_irrig")
-       call seq_flds_add(x2r_fluxes,"Flrl_irrig")
-       call seq_flds_add(l2x_fluxes_to_rof,'Flrl_irrig')
-       longname = 'Irrigation flux (withdrawal from rivers)'
-       stdname  = 'irrigation'
-       units    = 'kg m-2 s-1'
-       attname  = 'Flrl_irrig'
-       call metadata_set(attname, longname, stdname, units)
-    end if
-
     !-----------------------------
     ! rof->ocn (runoff) and rof->lnd (flooding)
     !-----------------------------
@@ -2221,25 +2214,173 @@ contains
     attname  = 'Flrr_volrmch'
     call metadata_set(attname, longname, stdname, units)
 
-    if (trim(cime_model) == 'e3sm') then
-       call seq_flds_add(r2x_fluxes,'Flrr_supply')
-       call seq_flds_add(x2l_fluxes,'Flrr_supply')
-       longname = 'River model supply for land use'
-       stdname  = 'rtm_supply'
-       units    = 'kg m-2 s-1'
-       attname  = 'Flrr_supply'
-       call metadata_set(attname, longname, stdname, units)
-    endif
+    call seq_flds_add(r2x_fluxes,'Flrr_supply')
+    call seq_flds_add(x2l_fluxes,'Flrr_supply')
+    longname = 'River model supply for land use'
+    stdname  = 'rtm_supply'
+    units    = 'kg m-2 s-1'
+    attname  = 'Flrr_supply'
+    call metadata_set(attname, longname, stdname, units)
     
-	if (trim(cime_model) == 'e3sm') then   
-       call seq_flds_add(r2x_fluxes,'Flrr_deficit')
-       call seq_flds_add(x2l_fluxes,'Flrr_deficit')
-       longname = 'River model supply deficit'
-       stdname  = 'rtm_deficit'
-       units    = 'kg m-2 s-1'
-       attname  = 'Flrr_deficit'
-       call metadata_set(attname, longname, stdname, units)
+    call seq_flds_add(r2x_fluxes,'Flrr_deficit')
+    call seq_flds_add(x2l_fluxes,'Flrr_deficit')
+    longname = 'River model supply deficit'
+    stdname  = 'rtm_deficit'
+    units    = 'kg m-2 s-1'
+    attname  = 'Flrr_deficit'
+    call metadata_set(attname, longname, stdname, units)
+
+    ! land river two way coupling
+    if (lnd_rof_two_way) then
+      call seq_flds_add(r2x_fluxes, 'Sr_h2orof')
+      call seq_flds_add(x2l_fluxes, 'Sr_h2orof')
+      longname = 'Inundation floodplain water volume'
+      stdname  = 'rtm_inundwf'
+      units    = 'mm'
+      attname  = 'inundwf'
+      call metadata_set(attname, longname, stdname, units)
+
+      call seq_flds_add(r2x_fluxes, 'Sr_frac_h2orof')
+      call seq_flds_add(x2l_fluxes, 'Sr_frac_h2orof')
+      longname = 'Inundation floodplain water area fraction'
+      stdname  = 'rtm_inundff'
+      units    = '1'
+      attname  = 'inundff'
+      call metadata_set(attname, longname, stdname, units)
+
+      call seq_flds_add(l2x_fluxes, 'Flrl_inundinf')
+      call seq_flds_add(x2r_fluxes, 'Flrl_inundinf')
+      call seq_flds_add(l2x_fluxes_to_rof,'Flrl_inundinf')
+      longname = 'Infiltration from floodplain inundation volume'
+      stdname  = 'floodplain_inundation_infiltration'
+      units    = 'mm/s'
+      attname  = 'inundinf'
+      call metadata_set(attname, longname, stdname, units)
     endif
+
+    if (rof2ocn_nutrients) then
+       call seq_flds_add(r2x_fluxes,'Forr_rofDIN')
+       call seq_flds_add(x2o_fluxes,'Foxx_rofDIN')
+       call seq_flds_add(r2o_liq_fluxes,'Forr_rofDIN')
+       longname = 'DIN flux due to runoff'
+       stdname  = 'DIN_flux_into_sea_water'
+       units    = 'kg N per kg water'
+       attname  = 'Forr_rofDIN'
+       call metadata_set(attname, longname, stdname, units)
+       attname  = 'Foxx_rofDIN'
+       call metadata_set(attname, longname, stdname, units)
+
+       call seq_flds_add(r2x_fluxes,'Forr_rofDIP')
+       call seq_flds_add(x2o_fluxes,'Foxx_rofDIP')
+       call seq_flds_add(r2o_liq_fluxes,'Forr_rofDIP')
+       longname = 'DIP flux due to runoff'
+       stdname  = 'DIP_flux_into_sea_water'
+       units    = 'kg P per kg water'
+       attname  = 'Forr_rofDIP'
+       call metadata_set(attname, longname, stdname, units)
+       attname  = 'Foxx_rofDIP'
+       call metadata_set(attname, longname, stdname, units)
+
+       call seq_flds_add(r2x_fluxes,'Forr_rofDON')
+       call seq_flds_add(x2o_fluxes,'Foxx_rofDON')
+       call seq_flds_add(r2o_liq_fluxes,'Forr_rofDON')
+       longname = 'DON flux due to runoff'
+       stdname  = 'DON_flux_into_sea_water'
+       units    = 'kg N per kg water'
+       attname  = 'Forr_rofDON'
+       call metadata_set(attname, longname, stdname, units)
+       attname  = 'Foxx_rofDON'
+       call metadata_set(attname, longname, stdname, units)
+
+       call seq_flds_add(r2x_fluxes,'Forr_rofDOP')
+       call seq_flds_add(x2o_fluxes,'Foxx_rofDOP')
+       call seq_flds_add(r2o_liq_fluxes,'Forr_rofDOP')
+       longname = 'DOP flux due to runoff'
+       stdname  = 'DOP_flux_into_sea_water'
+       units    = 'kg P per kg water'
+       attname  = 'Forr_rofDOP'
+       call metadata_set(attname, longname, stdname, units)
+       attname  = 'Foxx_rofDOP'
+       call metadata_set(attname, longname, stdname, units)
+
+       call seq_flds_add(r2x_fluxes,'Forr_rofDOC')
+       call seq_flds_add(x2o_fluxes,'Foxx_rofDOC')
+       call seq_flds_add(r2o_liq_fluxes,'Forr_rofDOC')
+       longname = 'DOC flux due to runoff'
+       stdname  = 'DOC_flux_into_sea_water'
+       units    = 'kg C per kg water'
+       attname  = 'Forr_rofDOC'
+       call metadata_set(attname, longname, stdname, units)
+       attname  = 'Foxx_rofDOC'
+       call metadata_set(attname, longname, stdname, units)
+
+       call seq_flds_add(r2x_fluxes,'Forr_rofPP')
+       call seq_flds_add(x2o_fluxes,'Foxx_rofPP')
+       call seq_flds_add(r2o_liq_fluxes,'Forr_rofPP')
+       longname = 'PP flux due to runoff'
+       stdname  = 'PP_flux_into_sea_water'
+       units    = 'kg P per kg water'
+       attname  = 'Forr_rofPP'
+       call metadata_set(attname, longname, stdname, units)
+       attname  = 'Foxx_rofPP'
+       call metadata_set(attname, longname, stdname, units)
+
+       call seq_flds_add(r2x_fluxes,'Forr_rofDSi')
+       call seq_flds_add(x2o_fluxes,'Foxx_rofDSi')
+       call seq_flds_add(r2o_liq_fluxes,'Forr_rofDSi')
+       longname = 'DSi flux due to runoff'
+       stdname  = 'DSi_flux_into_sea_water'
+       units    = 'kg Si per kg water'
+       attname  = 'Forr_rofDSi'
+       call metadata_set(attname, longname, stdname, units)
+       attname  = 'Foxx_rofDSi'
+       call metadata_set(attname, longname, stdname, units)
+
+       call seq_flds_add(r2x_fluxes,'Forr_rofPOC')
+       call seq_flds_add(x2o_fluxes,'Foxx_rofPOC')
+       call seq_flds_add(r2o_liq_fluxes,'Forr_rofPOC')
+       longname = 'POC flux due to runoff'
+       stdname  = 'POC_flux_into_sea_water'
+       units    = 'kg C per kg water'
+       attname  = 'Forr_rofPOC'
+       call metadata_set(attname, longname, stdname, units)
+       attname  = 'Foxx_rofPOC'
+       call metadata_set(attname, longname, stdname, units)
+
+       call seq_flds_add(r2x_fluxes,'Forr_rofPN')
+       call seq_flds_add(x2o_fluxes,'Foxx_rofPN')
+       call seq_flds_add(r2o_liq_fluxes,'Forr_rofPN')
+       longname = 'PN flux due to runoff'
+       stdname  = 'PN_flux_into_sea_water'
+       units    = 'kg N per kg water'
+       attname  = 'Forr_rofPN'
+       call metadata_set(attname, longname, stdname, units)
+       attname  = 'Foxx_rofPN'
+       call metadata_set(attname, longname, stdname, units)
+
+       call seq_flds_add(r2x_fluxes,'Forr_rofDIC')
+       call seq_flds_add(x2o_fluxes,'Foxx_rofDIC')
+       call seq_flds_add(r2o_liq_fluxes,'Forr_rofDIC')
+       longname = 'DIC flux due to runoff'
+       stdname  = 'DIC_flux_into_sea_water'
+       units    = 'kg C per kg water'
+       attname  = 'Forr_rofDIC'
+       call metadata_set(attname, longname, stdname, units)
+       attname  = 'Foxx_rofDIC'
+       call metadata_set(attname, longname, stdname, units)
+
+       call seq_flds_add(r2x_fluxes,'Forr_rofFe')
+       call seq_flds_add(x2o_fluxes,'Foxx_rofFe')
+       call seq_flds_add(r2o_liq_fluxes,'Forr_rofFe')
+       longname = 'Fe flux due to runoff'
+       stdname  = 'Fe_flux_into_sea_water'
+       units    = 'kg Fe per kg water'
+       attname  = 'Forr_rofFe'
+       call metadata_set(attname, longname, stdname, units)
+       attname  = 'Foxx_rofFe'
+       call metadata_set(attname, longname, stdname, units)
+    endif !rof2ocn_nutrients
+
     !-----------------------------
     ! wav->ocn and ocn->wav
     !-----------------------------
@@ -2798,7 +2939,7 @@ contains
        longname = 'Surface flux of CO2 from land'
        stdname  = 'surface_upward_flux_of_carbon_dioxide_where_land'
        units    = 'moles m-2 s-1'
-       attname  = 'Fall_foc2_lnd'
+       attname  = 'Fall_fco2_lnd'
        call metadata_set(attname, longname, stdname, units)
 
        call seq_flds_add(o2x_fluxes, "Faoo_fco2_ocn")
@@ -2840,7 +2981,7 @@ contains
        longname = 'Surface flux of CO2 from land'
        stdname  = 'surface_upward_flux_of_carbon_dioxide_where_land'
        units    = 'moles m-2 s-1'
-       attname  = 'Fall_foc2_lnd'
+       attname  = 'Fall_fco2_lnd'
        call metadata_set(attname, longname, stdname, units)
 
        call seq_flds_add(o2x_fluxes, "Faoo_fco2_ocn")
