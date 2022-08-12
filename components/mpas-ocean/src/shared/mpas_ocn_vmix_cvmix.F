@@ -71,7 +71,8 @@ module ocn_vmix_cvmix
    integer, parameter ::                 & ! supported cvmix background schemes
       cvmixBackgroundTypeNone = 0,       & ! no background scheme
       cvmixBackgroundTypeConstant = 1,   & ! Constant background scheme
-      cvmixBackgroundTypeBryanLewis = 2    ! Bryan Lewis background scheme
+      cvmixBackgroundTypeBryanLewis = 2, & ! Bryan Lewis background scheme
+      cvmixBackgroundTypeLatDep = 3        ! Latitude Dependent background scheme
 
    integer :: cvmixShearMixingChoice       ! user choice of vmix shear mixing scheme
 
@@ -79,7 +80,6 @@ module ocn_vmix_cvmix
       cvmixShearMixingTypePP = 1,        & ! PP mixing scheme
       cvmixShearMixingTypeKPP = 2          ! KPP mixing scheme
 
-   character(len=256) :: tmpstr
    integer :: myunit
 
 !***********************************************************************
@@ -174,6 +174,7 @@ contains
 
       real (kind=RKIND) :: latCellDeg, latCellDegAbs
       real (kind=RKIND),allocatable,save :: bdlatfn(:)
+      logical :: debug_bdlatfn = .false.
       logical,save :: first_call = .true.
 
       !-----------------------------------------------------------------
@@ -255,36 +256,30 @@ contains
 
       nCells = nCellsArray( 3 )
 
-      if (first_call) then
+      if (first_call .and. cvmixBackgroundChoice == cvmixBackgroundTypeLatDep) then
          allocate(bdlatfn(nCells))
          bdlatfn(:) = -999.0_RKIND
-         write(myunit,'(a,2g12.4)') 'tcx0 ',config_cvmix_background_viscosity,config_cvmix_background_diffusion
-         write(tmpstr,'(a,2g12.4)') 'tcx0 ',config_cvmix_background_viscosity,config_cvmix_background_diffusion
-         call mpas_log_write(trim(tmpstr),MPAS_LOG_OUT)
+         if (debug_bdlatfn) then
+            write(myunit,'(a,2g12.4)') 'tcx0 ',config_cvmix_background_viscosity,config_cvmix_background_diffusion
+         endif
          do iCell = 1, nCells
             ! Lat function for background visc/diff
             ! tcraig, is PI not defined to more than 3 digits in mpas-ocean???
             latCellDeg = latCell(iCell) * 180.0_RKIND / 3.14_RKIND
             latCellDegAbs = abs(latCellDeg)
             if (latCellDegAbs < 5.0_RKIND) then
-               call mpas_log_write('tcxL0',MPAS_LOG_OUT)
                bdlatfn(iCell) = 0.0_RKIND
             elseif (latCellDegAbs >= 5.0_RKIND .and. latCellDegAbs <= 27._RKIND) then
-               call mpas_log_write('tcxL5',MPAS_LOG_OUT)
                bdlatfn(iCell) = (1.0_RKIND-exp(-((latCellDegAbs-5._RKIND)/8._RKIND)**2))
             elseif (latCellDegAbs > 27.0_RKIND .and. latCellDegAbs <= 30._RKIND) then
-               call mpas_log_write('tcxL27',MPAS_LOG_OUT)
                bdlatfn(iCell) = 1.0_RKIND
             elseif (latCellDegAbs > 30._RKIND) then
-               call mpas_log_write('tcxL30',MPAS_LOG_OUT)
                bdlatfn(iCell) = 0.75_RKIND*(exp(-((latCellDegAbs-30._RKIND)**2)/36._RKIND)) + 0.25_RKIND
             endif
-            write(myunit,'(a,i8,2g12.4)') 'tcx1 ',iCell,lonCell(iCell),latCell(iCell)
-            write(tmpstr,'(a,i8,2g12.4)') 'tcx1 ',iCell,lonCell(iCell),latCell(iCell)
-            call mpas_log_write(trim(tmpstr),MPAS_LOG_OUT)
-            write(myunit,'(a,i8,2g12.4)') 'tcx2 ',iCell,latCellDeg,bdlatfn(iCell)
-            write(tmpstr,'(a,i8,2g12.4)') 'tcx2 ',iCell,latCellDeg,bdlatfn(iCell)
-            call mpas_log_write(trim(tmpstr),MPAS_LOG_OUT)
+            if (debug_bdlatfn) then
+               write(myunit,'(a,i8,2g12.4)') 'tcx1 ',iCell,lonCell(iCell),latCell(iCell)
+               write(myunit,'(a,i8,2g12.4)') 'tcx2 ',iCell,latCellDeg,bdlatfn(iCell)
+            endif
          enddo
       endif
 
@@ -292,6 +287,17 @@ contains
       ! start by adding the mininum background values to the viscocity/diffusivity arrays
       !
       if (cvmixBackgroundChoice == cvmixBackgroundTypeConstant) then
+         !$omp parallel
+         !$omp do schedule(runtime) private(k)
+         do iCell = 1, nCells
+            do k = 1, nVertLevelsP1
+               vertViscTopOfCell(k, iCell) = vertViscTopOfCell(k, iCell) + config_cvmix_background_viscosity
+               vertDiffTopOfCell(k, iCell) = vertDiffTopOfCell(k, iCell) + config_cvmix_background_diffusion
+            end do
+         end do
+         !$omp end do
+         !$omp end parallel
+      elseif (cvmixBackgroundChoice == cvmixBackgroundTypeLatDep) then
          !$omp parallel
          !$omp do schedule(runtime) private(k)
          do iCell = 1, nCells
@@ -924,6 +930,10 @@ contains
 
          cvmixBackgroundChoice = cvmixBackgroundTypeConstant
 
+      case ('latdep', 'Latdep', 'latdDep', 'LatDep', 'LATDEP')
+
+         cvmixBackgroundChoice = cvmixBackgroundTypeLatDep
+
       case ('bryanlewis', 'bryanLewis', 'BryanLewis', 'BRYANLEWIS')
 
          cvmixBackgroundChoice = cvmixBackgroundTypeBryanLewis
@@ -932,7 +942,7 @@ contains
 
          call mpas_log_write(&
             'Invalid choice for config_cvmix_background_scheme.  Choices are: none, &
-             &constant, BryanLewis')
+             &constant, BryanLewis, LatDep')
 
          err = 1
 
@@ -963,7 +973,8 @@ contains
       !
       ! initialize background mixing
       !
-      if ( cvmixBackgroundChoice == cvmixBackgroundTypeConstant ) then
+      if ( cvmixBackgroundChoice == cvmixBackgroundTypeConstant .or. &
+           cvmixBackgroundChoice == cvmixBackgroundTypeLatDep ) then
            call cvmix_init_bkgnd( &
                   bkgnd_Tdiff = config_cvmix_background_diffusion, &
                   bkgnd_Mdiff = config_cvmix_background_viscosity, &
@@ -976,7 +987,7 @@ contains
       if (config_use_cvmix_shear) then
         if (cvmixBackgroundChoice == cvmixBackgroundTypeNone .and. cvmixShearMixingChoice == cvmixShearMixingTypePP) then
             call mpas_log_write("config_use_cvmix_shear cannot be used with with config_cvmix_shear_mixing_scheme = 'PP'" &
-                 // "       without config_cvmix_background_scheme = 'constant' or 'BryanLewis'", MPAS_LOG_CRIT)
+                 // "       without config_cvmix_background_scheme = 'constant', 'LatDep', or 'BryanLewis'", MPAS_LOG_CRIT)
             err = 1
             return
         end if
