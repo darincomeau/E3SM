@@ -760,7 +760,7 @@ Default: Defined in namelist_defaults.xml
 
 <entry id="config_cvmix_background_scheme" type="char*1024"
 	category="cvmix" group="cvmix">
-Scheme for background diffusivity, 'constant' for constant with depth and space, 'BryanLewis' for vertically variable, 'none' for no background diffusivity
+Scheme for background diffusivity, 'constant' for constant with depth and space, 'BryanLewis' for vertically variable, 'LatDep' for latitude dependent, 'none' for no background diffusivity
 
 Valid values: 'constant', 'BryanLewis', and 'none'
 Default: Defined in namelist_defaults.xml
