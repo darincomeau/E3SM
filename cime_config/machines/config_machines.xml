@@ -1144,7 +1144,7 @@
       <modules compiler="intel">
         <command name="load">PrgEnv-intel/8.0.0</command>
         <command name="rm">intel</command>
-        <command name="load">intel/2021.3.0</command>
+        <command name="load">intel-classic/2021.3.0</command>
         <command name="rm">cray-mpich</command>
         <command name="load">cray-mpich/8.1.9</command>
         <command name="load">cray-pals/1.0.17</command>
