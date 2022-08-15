@@ -540,7 +540,7 @@
       </pes>
     </mach>
   </grid>
-  <grid name="a%T62.+oi%oARRM60to10|a%TL319.+oi%oARRM60to10">
+  <grid name="a%T62.+oi%oARRM60to10|a%TL319.+oi%oARRM60to10|a%T62.+oi%ARRM10to60|a%TL319.+oi%ARRM10to60">
     <mach name="onyx|warhawk|blackbird">
       <pes compset=".*MPASCICE.+MPASO.+|.*MPASSI.+MPASO.+" pesize="any">
         <comment>none</comment>
