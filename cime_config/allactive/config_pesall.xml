@@ -2379,7 +2379,7 @@
       </pes>
     </mach>
   </grid>
-  <grid name="a%ne30.+oi%oARRM60to10">
+  <grid name="a%ne30.+oi%oARRM60to10|a%ne30.+oi%ARRM10to60">
     <mach name="onyx|warhawk|blackbird">
       <pes compset=".*EAM.+ELM.+MPASSI.+MPASO.+MOSART.*" pesize="any">
         <comment>none</comment>
