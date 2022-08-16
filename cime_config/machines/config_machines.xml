@@ -1144,7 +1144,7 @@
       <modules compiler="intel">
         <command name="load">PrgEnv-intel/8.0.0</command>
         <command name="rm">intel</command>
-        <command name="load">intel/2021.3.0</command>
+        <command name="load">intel-classic/2021.3.0</command>
         <command name="rm">cray-mpich</command>
         <command name="load">cray-mpich/8.1.9</command>
         <command name="load">cray-pals/1.0.17</command>
@@ -1239,10 +1239,19 @@
         <command name="rm">cray-parallel-netcdf</command>
       </modules>
 
-      <modules>
-        <command name="rm">cmake</command>
-        <command name="load">cmake</command>
-        <command name="load">perl5-extras</command>
+      <modules compiler="intel">
+        <command name="load">PrgEnv-intel/8.0.0</command>
+        <command name="rm">intel</command>
+        <command name="load">intel-classic/2021.3.0</command>
+        <command name="rm">cray-mpich</command>
+        <command name="load">cray-mpich/8.1.9</command>
+        <command name="load">cray-pals/1.0.17</command>
+        <command name="load">cray-netcdf/4.7.4.4</command>
+        <command name="load">cray-hdf5/1.12.0.4</command>
+        <command name="load">cray-parallel-netcdf/1.12.1.4</command>
+        <command name="rm">cray-libsci</command>
+        <command name="load">cmake/3.21.4</command>
+        <command name="load">cray-libsci/21.08.1.2</command>
       </modules>
     </module_system>
     <RUNDIR>$CIME_OUTPUT_ROOT/$CASE/run</RUNDIR>
