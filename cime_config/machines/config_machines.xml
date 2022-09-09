@@ -981,7 +981,7 @@
     <GMAKE_J>8</GMAKE_J>
     <TESTS>e3sm_developer</TESTS>
     <BATCH_SYSTEM>pbs</BATCH_SYSTEM>
-    <SUPPORTED_BY>e3sm</SUPPORTED_BY>
+    <SUPPORTED_BY>rasm</SUPPORTED_BY>
     <MAX_TASKS_PER_NODE>44</MAX_TASKS_PER_NODE>
     <MAX_MPITASKS_PER_NODE>44</MAX_MPITASKS_PER_NODE>
     <mpirun mpilib="default">
@@ -1090,7 +1090,7 @@
     <GMAKE_J>8</GMAKE_J>
     <TESTS>e3sm_developer</TESTS>
     <BATCH_SYSTEM>pbs</BATCH_SYSTEM>
-    <SUPPORTED_BY>e3sm</SUPPORTED_BY>
+    <SUPPORTED_BY>rasm</SUPPORTED_BY>
     <MAX_TASKS_PER_NODE>128</MAX_TASKS_PER_NODE>
     <MAX_MPITASKS_PER_NODE>128</MAX_MPITASKS_PER_NODE>
     <mpirun mpilib="default">
@@ -1188,7 +1188,7 @@
     <GMAKE_J>8</GMAKE_J>
     <TESTS>e3sm_developer</TESTS>
     <BATCH_SYSTEM>pbs</BATCH_SYSTEM>
-    <SUPPORTED_BY>e3sm</SUPPORTED_BY>
+    <SUPPORTED_BY>rasm</SUPPORTED_BY>
     <MAX_TASKS_PER_NODE>128</MAX_TASKS_PER_NODE>
     <MAX_MPITASKS_PER_NODE>128</MAX_MPITASKS_PER_NODE>
     <mpirun mpilib="default">
@@ -1317,6 +1317,171 @@
       <env name="OMP_STACKSIZE">64M</env>
       <env name="OMP_PROC_BIND">spread</env>
       <env name="OMP_PLACES">threads</env>
+
+      <!--env name="HDF5_DISABLE_VERSION_CHECK">2</env-->
+      <env name="HDF5_USE_FILE_LOCKING">FALSE</env>
+    </environment_variables>
+    <environment_variables compiler="intel">
+      <env name="FORT_BUFFERED">yes</env>
+    </environment_variables>
+    <environment_variables compiler="intel18">
+      <env name="FORT_BUFFERED">yes</env>
+    </environment_variables>
+  </machine>
+
+  <machine MACH="narwhal">
+    <DESC>NavyDSRC Cray EX, os is CNL, 128 pes/node, batch system is PBS</DESC>
+    <NODENAME_REGEX>narwhal</NODENAME_REGEX>
+    <OS>CNL</OS>
+    <COMPILERS>intel</COMPILERS>
+    <MPILIBS>mpich</MPILIBS>
+    <PROJECT>NPSCA07935242</PROJECT>
+    <SAVE_TIMING_DIR>/p/work1/projects/RASM/acme</SAVE_TIMING_DIR>
+    <SAVE_TIMING_DIR_PROJECTS>.*</SAVE_TIMING_DIR_PROJECTS>
+    <CIME_OUTPUT_ROOT>$ENV{WORKDIR}</CIME_OUTPUT_ROOT>
+    <DIN_LOC_ROOT>/p/work1/projects/RASM/acme/inputdata</DIN_LOC_ROOT>
+    <DIN_LOC_ROOT_CLMFORC>/p/work1/projects/RASM/acme/inputdata/atm/datm7</DIN_LOC_ROOT_CLMFORC>
+    <DOUT_S_ROOT>$CIME_OUTPUT_ROOT/archive/$CASE</DOUT_S_ROOT>
+    <BASELINE_ROOT>/p/work1/projects/RASM/acme/baselines/$COMPILER</BASELINE_ROOT>
+    <CCSM_CPRNC>/p/work1/projects/RASM/tools/cprnc/cprnc</CCSM_CPRNC>
+    <GMAKE_J>8</GMAKE_J>
+    <TESTS>e3sm_developer</TESTS>
+    <BATCH_SYSTEM>pbs</BATCH_SYSTEM>
+    <SUPPORTED_BY>e3sm</SUPPORTED_BY>
+    <MAX_TASKS_PER_NODE>128</MAX_TASKS_PER_NODE>
+    <MAX_MPITASKS_PER_NODE>128</MAX_MPITASKS_PER_NODE>
+    <PROJECT_REQUIRED>TRUE</PROJECT_REQUIRED>
+    <mpirun mpilib="default">
+      <executable>aprun</executable>
+      <arguments>
+        <arg name="num_tasks">-n {{ total_tasks }}</arg>
+        <arg name="tasks_per_node">-N $SHELL{if [ `./xmlquery --value MAX_MPITASKS_PER_NODE` -gt `./xmlquery --value TOTAL_TASKS` ];then echo `./xmlquery --value TOTAL_TASKS`;else echo `./xmlquery --value MAX_MPITASKS_PER_NODE`;fi;}</arg>
+        <arg name="hyperthreading">--cc depth -d $SHELL{echo `./xmlquery --value MAX_TASKS_PER_NODE`/`./xmlquery --value MAX_MPITASKS_PER_NODE`|bc} -j $SHELL{if [ 64 -ge `./xmlquery --value MAX_TASKS_PER_NODE` ];then echo 1;else echo `./xmlquery --value MAX_TASKS_PER_NODE`/64|bc;fi;}</arg>
+      </arguments>
+    </mpirun>
+    <module_system type="module">
+      <init_path lang="perl">/opt/cray/pe/modules/3.2.11.5/init/perl.pm</init_path>
+      <init_path lang="python">/opt/cray/pe/modules/3.2.11.5/init/python.py</init_path>
+      <init_path lang="sh">/opt/cray/pe/modules/3.2.11.5/init/sh</init_path>
+      <init_path lang="csh">/opt/cray/pe/modules/3.2.11.5/init/csh</init_path>
+      <cmd_path lang="perl">/opt/cray/pe/modules/3.2.11.5/bin/modulecmd perl</cmd_path>
+      <cmd_path lang="python">/opt/cray/pe/modules/3.2.11.5/bin/modulecmd python</cmd_path>
+      <cmd_path lang="sh">module</cmd_path>
+      <cmd_path lang="csh">module</cmd_path>
+      <modules>
+        <command name="rm">PrgEnv-intel</command>
+        <command name="rm">PrgEnv-cray</command>
+        <command name="rm">PrgEnv-gnu</command>
+        <command name="rm">PrgEnv-nvidia</command>
+        <command name="rm">PrgEnv-aocc</command>
+        <command name="rm">intel</command>
+        <command name="rm">cray-mpich</command>
+        <command name="rm">cray-hdf5</command>
+        <command name="rm">cray-hdf5-parallel</command>
+        <command name="rm">cray-netcdf</command>
+        <command name="rm">cray-netcdf-hdf5parallel</command>
+        <command name="rm">cray-parallel-netcdf</command>
+      </modules>
+
+      <modules compiler="intel">
+        <command name="load">PrgEnv-intel/8.0.0</command>
+        <command name="rm">intel</command>
+        <command name="rm">intel-classic</command>
+        <command name="load">intel-classic/2021.3.0</command>
+        <command name="rm">cray-mpich</command>
+        <command name="load">cray-mpich/8.1.14</command>
+        <command name="load">cray-netcdf/4.7.4.7</command>
+        <command name="load">cray-hdf5/1.12.0.7</command>
+        <command name="load">cray-parallel-netcdf/1.12.1.7</command>
+        <command name="rm">cray-libsci</command>
+        <command name="load">cray-libsci/21.08.1.2</command>
+      </modules>
+    </module_system>
+    <RUNDIR>$CIME_OUTPUT_ROOT/$CASE/run</RUNDIR>
+    <EXEROOT>$CIME_OUTPUT_ROOT/$CASE/bld</EXEROOT>
+    <TEST_TPUT_TOLERANCE>0.1</TEST_TPUT_TOLERANCE>
+    <environment_variables>
+      <env name="MPICH_ENV_DISPLAY">1</env>
+      <env name="MPICH_VERSION_DISPLAY">1</env>
+      <!--env name="NETCDF_DIR">/opt/cray/pe/netcdf/4.7.4.0/intel/19.1</env-->
+      <!--env name="MPICH_CPUMASK_DISPLAY">1</env-->
+
+      <env name="OMP_STACKSIZE">64M</env>
+      <env name="OMP_PROC_BIND">spread</env>
+      <env name="OMP_PLACES">threads</env>
+
+      <!--env name="HDF5_DISABLE_VERSION_CHECK">2</env-->
+      <env name="HDF5_USE_FILE_LOCKING">FALSE</env>
+    </environment_variables>
+    <environment_variables compiler="intel">
+      <env name="FORT_BUFFERED">yes</env>
+    </environment_variables>
+    <environment_variables compiler="intel18">
+      <env name="FORT_BUFFERED">yes</env>
+    </environment_variables>
+  </machine>
+
+  <machine MACH="mustang">
+    <DESC>**NOT WORKING** AFRL HPE SGI 8600, os is RHEL, 48 pes/node, batch system is PBS</DESC>
+    <NODENAME_REGEX>mustang</NODENAME_REGEX>
+    <OS>LINUX</OS>
+    <COMPILERS>intel</COMPILERS>
+    <MPILIBS>mpich</MPILIBS>
+    <CHARGE_ACCOUNT>NPSCA07935242</CHARGE_ACCOUNT>
+    <SAVE_TIMING_DIR>/p/work1/projects/RASM/acme</SAVE_TIMING_DIR>
+    <SAVE_TIMING_DIR_PROJECTS>.*</SAVE_TIMING_DIR_PROJECTS>
+    <CIME_OUTPUT_ROOT>$ENV{WORKDIR}</CIME_OUTPUT_ROOT>
+    <DIN_LOC_ROOT>/p/work1/projects/RASM/acme/inputdata</DIN_LOC_ROOT>
+    <DIN_LOC_ROOT_CLMFORC>/p/work1/projects/RASM/acme/inputdata/atm/datm7</DIN_LOC_ROOT_CLMFORC>
+    <DOUT_S_ROOT>$CIME_OUTPUT_ROOT/archive/$CASE</DOUT_S_ROOT>
+    <BASELINE_ROOT>/p/work1/projects/RASM/acme/baselines/$COMPILER</BASELINE_ROOT>
+    <CCSM_CPRNC>/p/work1/projects/RASM/tools/cprnc/cprnc</CCSM_CPRNC>
+    <GMAKE_J>8</GMAKE_J>
+    <TESTS>e3sm_developer</TESTS>
+    <BATCH_SYSTEM>pbs</BATCH_SYSTEM>
+    <SUPPORTED_BY>rasm</SUPPORTED_BY>
+    <MAX_TASKS_PER_NODE>48</MAX_TASKS_PER_NODE>
+    <MAX_MPITASKS_PER_NODE>48</MAX_MPITASKS_PER_NODE>
+    <mpirun mpilib="default">
+      <executable>mpiexec_mpt</executable>
+      <arguments>
+        <arg name="num_tasks">-np {{ total_tasks }}</arg>
+      </arguments>
+    </mpirun>
+    <module_system type="module">
+      <init_path lang="perl">/p/app/Modules/4.6.0/init/perl.pm</init_path>
+      <init_path lang="python">/p/app/Modules/4.6.0/init/python.py</init_path>
+      <init_path lang="sh">/p/app/Modules/4.6.0/init/sh</init_path>
+      <init_path lang="csh">/p/app/Modules/4.6.0/init/csh</init_path>
+      <cmd_path lang="perl">/p/app/Modules/4.6.0/bin/modulecmd perl</cmd_path>
+      <cmd_path lang="python">/p/app/Modules/4.6.0/bin/modulecmd python</cmd_path>
+      <cmd_path lang="sh">module</cmd_path>
+      <cmd_path lang="csh">module</cmd_path>
+      <modules compiler="intel">
+        <command name="load">costinit</command>
+        <command name="load">Cmake/3.21.4</command>
+        <command name="unload">compiler</command>
+        <command name="load">compiler/intel/18.0.1.163</command>
+        <command name="unload">mpt</command>
+        <command name="load">mpt/2.18</command>
+        <command name="unload">netcdf-fortran</command>
+        <command name="load">netcdf-fortran/intel/4.4.2</command>
+        <command name="load">pnetcdf/intel/sgimpt/1.8.1</command>
+      </modules>
+    </module_system>
+    <RUNDIR>$CIME_OUTPUT_ROOT/$CASE/run</RUNDIR>
+    <EXEROOT>$CIME_OUTPUT_ROOT/$CASE/bld</EXEROOT>
+    <TEST_TPUT_TOLERANCE>0.1</TEST_TPUT_TOLERANCE>
+    <environment_variables>
+      <env name="PNETCDF_PATH">/p/app/COST/pnetcdf/1.8.1/intel/sgimpt</env>
+      <env name="NETCDF_PATH">/app/COST/netcdf-fortran/4.4.2/intel</env>
+      <env name="MPI_IB_RNR_TIMER">26</env>
+      <env name="MPI_IB_RNR_TIMEOUT">22</env>
+      <env name="MPI_IB_SERVICE_LEVEL">1</env>
+      <env name="MPI_VERBOSE">true</env>
+      <env name="MPI_IB_CONGESTED">2</env>
+      <env name="WRFIO_NCD_LARGE_FILE_SUPPORT">1</env>
+      <env name="WRF_EM_CORE">1</env>
 
       <!--env name="HDF5_DISABLE_VERSION_CHECK">2</env-->
       <env name="HDF5_USE_FILE_LOCKING">FALSE</env>

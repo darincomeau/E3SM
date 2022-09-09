@@ -1,0 +1,6 @@
+string(APPEND FFLAGS " -fp-model consistent -fimf-use-svml")
+string(APPEND CXXFLAGS " -fp-model consistent")
+if (NOT DEBUG)
+  string(APPEND FFLAGS " -qno-opt-dynamic-align")
+endif()
+string(APPEND SLIBS " -lnetcdf -lnetcdff -L/p/app/COST/dependencies/curl/7.63.0/intel/lib -l curl -mkl -lpthread")
