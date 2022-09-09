@@ -283,6 +283,12 @@
 
   <entry id="CPL_PIO_TYPENAME">
     <values>
+      <value mach="narwhal" >netcdf</value>
+    </values>
+  </entry>
+
+  <entry id="CPL_PIO_TYPENAME">
+    <values>
       <value mach="warhawk" >netcdf</value>
     </values>
   </entry>
@@ -290,6 +296,12 @@
   <entry id="CPL_PIO_TYPENAME">
     <values>
       <value mach="blackbird" >netcdf</value>
+    </values>
+  </entry>
+
+  <entry id="CPL_PIO_TYPENAME">
+    <values>
+      <value mach="mustang" >netcdf</value>
     </values>
   </entry>
 
