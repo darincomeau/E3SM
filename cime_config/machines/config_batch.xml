@@ -468,7 +468,7 @@
       <directive>-l select=1:ncpus=1</directive>
     </directives>
     <queues>
-      <queue walltimemax="00:29:00" nodemax="64" strict="true">debug</queue>
+      <queue walltimemax="00:30:00" nodemax="64" strict="true">debug</queue>
       <queue walltimemax="04:00:00" default="true">standard</queue>
       <queue default="true" walltimemax="12:00:00" jobmin="1" jobmax="1">transfer</queue>
     </queues>
