@@ -185,6 +185,11 @@ contains
       logical :: debug_bdlatfn = .false.
       logical,save :: first_call = .true.
 
+      real (kind=RKIND) :: latCellDeg, latCellDegAbs
+      real (kind=RKIND),allocatable,save :: bdlatfn(:)
+      logical :: debug_bdlatfn = .false.
+      logical,save :: first_call = .true.
+
       !-----------------------------------------------------------------
       !
       ! call relevant routines for computing mixing-related fields
