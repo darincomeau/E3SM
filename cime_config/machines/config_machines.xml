@@ -3470,8 +3470,8 @@
     <MPILIBS>openmpi,impi,mvapich</MPILIBS>
     <PROJECT>climateacme</PROJECT>
     <CIME_OUTPUT_ROOT>/lustre/scratch4/yellow/$ENV{USER}/E3SM/scratch</CIME_OUTPUT_ROOT>
-    <DIN_LOC_ROOT>/lustre/scratch4/yellow/$ENV{USER}/E3SM/input_data</DIN_LOC_ROOT>
-    <DIN_LOC_ROOT_CLMFORC>/lustre/scratch4/yellow/$ENV{USER}/E3SM/input_data/atm/datm7</DIN_LOC_ROOT_CLMFORC>
+    <DIN_LOC_ROOT>/usr/projects/e3sm_sage/input_data</DIN_LOC_ROOT>
+    <DIN_LOC_ROOT_CLMFORC>/usr/projects/e3sm_sage/input_data/atm/datm7</DIN_LOC_ROOT_CLMFORC>
     <DOUT_S_ROOT>/lustre/scratch4/yellow/$ENV{USER}/E3SM/archive/$CASE</DOUT_S_ROOT>
     <BASELINE_ROOT>/lustre/scratch4/yellow/$ENV{USER}/E3SM/input_data/ccsm_baselines/$COMPILER</BASELINE_ROOT>
     <CCSM_CPRNC>/usr/projects/e3sm_sage/software/cprnc</CCSM_CPRNC>
