@@ -3506,7 +3506,7 @@ contains
        setGetBGCTracers     = config_use_column_biogeochemistry
 
        ! code abort
-       abortFlag = .false. ! DC no place where this gets updated here
+       abortFlag = .false.
        abortMessage = ""
 
        do iCell = 1, nCellsSolve
@@ -3520,7 +3520,6 @@ contains
           call set_cice_tracer_array_category(block, ciceTracerObject, &
                  tracerArrayCategory, iCell, setGetPhysicsTracers, setGetBGCTracers)
 
-!          call colpkg_clear_warnings()
           call icepack_warnings_clear()
           call icepack_step_ridge(&
                dt=dynamicsTimeStep, &
@@ -3565,9 +3564,6 @@ contains
                fzsal=zSalinityFlux(iCell), &
                flux_bio=oceanBioFluxes(:,iCell), & ! DC no closing argument
                Tf=seaFreezingTemperature(iCell))
-!dc removed unsure          call column_write_warnings(abortFlag)
-
-!dc added unsure          call column_write_warnings(.false.)
 
 !          call column_write_warnings(abortFlag)
 
