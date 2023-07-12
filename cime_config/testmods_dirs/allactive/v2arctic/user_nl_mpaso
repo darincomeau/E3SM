@@ -1,0 +1,47 @@
+!----------------------------------------------------------------------------------
+! Users should add all user specific namelist changes after these comments 
+! in the form of 
+!   namelist_var = new_namelist_value 
+! *** EXCEPT FOR ***
+! 1. DO NOT CHANGE config_start_time, config_run_duration, config_stop_time,
+!    config_do_restart, config_Restart_timestamp_filename, config_calendar_type, 
+!    config_set_restingThickness_to_IC, config_alter_ICs_for_pbcs 
+! 2. To preview the namelists, invoke $CASEROOT preview-namelists and look at 
+!    $CASEROOT/CaseDocs/mpaso_in
+!
+!
+! Users cannot use this file to configure streams. In order to configure streams, 
+! write a stream configuration file, and place it in 
+! SourceMods/src.mpaso/streams.ocean
+!----------------------------------------------------------------------------------
+
+!----------------------------------------------------------------------------------
+! changes to defaults
+!----------------------------------------------------------------------------------
+ config_gm_spatially_variable_max_kappa = 3000.0
+ config_gm_spatially_variable_min_kappa = 600.0
+ config_cvmix_background_scheme = 'bryanlewis'
+! config_cvmix_bryanlewis_bl1 = 0.3E-4
+ config_cvmix_bryanlewis_bl1 = 0.8E-4
+ config_cvmix_bryanlewis_bl2 = 1.3E-4
+ config_cvmix_bryanlewis_transitiondepth = 1000.0
+ config_cvmix_bryanlewis_transitionwidth = 250.0
+ config_use_mom_del2 = .true.
+! config_tracer_del2 = 100.0
+! config_mom_del2 = 1000.0
+! config_mom_del4 = 1.2e11
+ config_am_mocstreamfunction_enable = .true.
+
+!----------------------------------------------------------------------------------
+! defaults, but may want to change
+!----------------------------------------------------------------------------------
+! config_gm_closure = 'EdenGreatbatch'
+! config_redi_closure = 'constant'
+! config_redi_constant_kappa = 400.0
+! config_cvmix_prandtl_number = 1.0
+! config_use_cvmix_tidal_mixing = .false.
+
+!----------------------------------------------------------------------------------
+! For G-cases only
+!----------------------------------------------------------------------------------
+! config_salinity_restoring_constant_piston_velocity = 1.9013e-5
