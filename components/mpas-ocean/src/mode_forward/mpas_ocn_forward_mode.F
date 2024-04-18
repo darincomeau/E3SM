@@ -78,7 +78,6 @@ module ocn_forward_mode
    use ocn_gm
    use ocn_submesoscale_eddies
    use ocn_stokes_drift
-   use ocn_manufactured_solution
 
    use ocn_high_freq_thickness_hmix_del2
 
