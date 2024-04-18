@@ -505,14 +505,8 @@ contains
 
       call mpas_pool_get_array(forcingPool, 'landIceInterfaceTracers', landIceInterfaceTracers)
 
-      call mpas_pool_get_dimension(forcingPool, &
-                                'index_landIceInterfaceTemperature', &
-                                 indexITPtr)
-      call mpas_pool_get_dimension(forcingPool, &
-                                'index_landIceInterfaceSalinity', &
-                                 indexISPtr)
-      indexIT = indexITPtr
-      indexIS = indexISPtr
+      call mpas_pool_get_dimension(forcingPool, 'index_landIceInterfaceTemperature', indexIT)
+      call mpas_pool_get_dimension(forcingPool, 'index_landIceInterfaceSalinity', indexIS)
 
       if (useHollandJenkinsAdvDiff) then
          call mpas_pool_get_array(forcingPool, 'landIceSurfaceTemperature', landIceSurfaceTemperature)
