@@ -2432,6 +2432,7 @@ v=accumulatedLandIceFrazilSalinityFlux; write(m,"('LandIceFrazilSalinityFlux',es
       err = 0
 
       if ( trim(config_land_ice_flux_mode) == 'standalone' .or. &
+           trim(config_land_ice_flux_mode) == 'data' ) .or. &
            trim(config_land_ice_flux_mode) == 'coupled' ) then
          landIceFreshwaterFluxesOn = .true.
       end if
