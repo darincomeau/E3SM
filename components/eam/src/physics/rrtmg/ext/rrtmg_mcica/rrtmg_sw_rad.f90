@@ -68,7 +68,7 @@
       use rrtmg_sw_spcvmc, only: spcvmc_sw
 
       use perf_mod
-
+      use radiation_readnl, only: split_rad_asym !DC not working
       implicit none
 
 ! public interfaces/functions/subroutines
@@ -352,6 +352,9 @@
       real(kind=r8) :: taua(nlay,nbndsw)      ! Aerosol optical depth
       real(kind=r8) :: ssaa(nlay,nbndsw)      ! Aerosol single scattering albedo
       real(kind=r8) :: asma(nlay,nbndsw)      ! Aerosol asymmetry parameter
+!DC
+      real(kind=r8) :: vis_frc                   ! JPT Weight of flux VIS-ward in band 9
+      real(kind=r8) :: nir_frc                   ! JPT Weight of flux NIR-ward in band 9
 
 ! Atmosphere - setcoef
       integer :: laytrop                        ! tropopause layer index
@@ -584,9 +587,17 @@
          albdir(nbndsw) = aldir(iplon)
          albdif(nbndsw) = aldif(iplon)
 !  Set band 24 (or, band 9 counting from 1) to use linear average of UV/visible
-!  and near-IR values, since this band straddles 0.7 microns: 
-         albdir(9) = 0.5*(aldir(iplon) + asdir(iplon))
-         albdif(9) = 0.5*(aldif(iplon) + asdif(iplon))
+!  and near-IR values, since this band straddles 0.7 microns:
+         !DC
+         if (split_rad_asym) then
+            vis_frc = 0.555           ! JPT: Proposed value
+            nir_frc = 1.0 - vis_frc   ! JPT: Proposed value
+            albdir(9) = (nir_frc*aldir(iplon)) + (vis_frc*asdir(iplon))
+            albdif(9) = (nir_frc*aldif(iplon)) + (vis_frc*asdif(iplon))
+         else
+            albdir(9) = 0.5*(aldir(iplon) + asdir(iplon))
+            albdif(9) = 0.5*(aldif(iplon) + asdif(iplon))
+         endif
 !  UV/visible bands 25-28 (10-13), 16000-50000 cm-1, 0.200-0.625 micron
          do ib=10,13
             albdir(ib) = asdir(iplon)
