@@ -625,23 +625,23 @@
                   endif
 ! band 9 is half-NearIR and half-Visible
                else if (ibm == 9) then  
-                  puvcd(ikl) = puvcd(ikl) + 0.5_r8*zincflx(iw)*zcd(jk,iw)
-                  puvfd(ikl) = puvfd(ikl) + 0.5_r8*zincflx(iw)*zfd(jk,iw)
-                  pnicd(ikl) = pnicd(ikl) + 0.5_r8*zincflx(iw)*zcd(jk,iw)
-                  pnifd(ikl) = pnifd(ikl) + 0.5_r8*zincflx(iw)*zfd(jk,iw)
+                  puvcd(ikl) = puvcd(ikl) + 0.555_r8*zincflx(iw)*zcd(jk,iw)
+                  puvfd(ikl) = puvfd(ikl) + 0.555_r8*zincflx(iw)*zfd(jk,iw)
+                  pnicd(ikl) = pnicd(ikl) + 0.445_r8*zincflx(iw)*zcd(jk,iw)
+                  pnifd(ikl) = pnifd(ikl) + 0.445_r8*zincflx(iw)*zfd(jk,iw)
                   if (idelm .eq. 0) then
-                     puvfddir(ikl) = puvfddir(ikl) + 0.5_r8*zincflx(iw)*ztdbt_nodel(jk)
-                     puvcddir(ikl) = puvcddir(ikl) + 0.5_r8*zincflx(iw)*ztdbtc_nodel(jk)
-                     pnifddir(ikl) = pnifddir(ikl) + 0.5_r8*zincflx(iw)*ztdbt_nodel(jk)
-                     pnicddir(ikl) = pnicddir(ikl) + 0.5_r8*zincflx(iw)*ztdbtc_nodel(jk)
+                     puvfddir(ikl) = puvfddir(ikl) + 0.555_r8*zincflx(iw)*ztdbt_nodel(jk)
+                     puvcddir(ikl) = puvcddir(ikl) + 0.555_r8*zincflx(iw)*ztdbtc_nodel(jk)
+                     pnifddir(ikl) = pnifddir(ikl) + 0.445_r8*zincflx(iw)*ztdbt_nodel(jk)
+                     pnicddir(ikl) = pnicddir(ikl) + 0.445_r8*zincflx(iw)*ztdbtc_nodel(jk)
                   elseif (idelm .eq. 1) then
-                     puvfddir(ikl) = puvfddir(ikl) + 0.5_r8*zincflx(iw)*ztdbt(jk)
-                     puvcddir(ikl) = puvcddir(ikl) + 0.5_r8*zincflx(iw)*ztdbtc(jk)
-                     pnifddir(ikl) = pnifddir(ikl) + 0.5_r8*zincflx(iw)*ztdbt(jk)
-                     pnicddir(ikl) = pnicddir(ikl) + 0.5_r8*zincflx(iw)*ztdbtc(jk)
+                     puvfddir(ikl) = puvfddir(ikl) + 0.555_r8*zincflx(iw)*ztdbt(jk)
+                     puvcddir(ikl) = puvcddir(ikl) + 0.555_r8*zincflx(iw)*ztdbtc(jk)
+                     pnifddir(ikl) = pnifddir(ikl) + 0.445_r8*zincflx(iw)*ztdbt(jk)
+                     pnicddir(ikl) = pnicddir(ikl) + 0.445_r8*zincflx(iw)*ztdbtc(jk)
                   endif
-                  pnicu(ikl) = pnicu(ikl) + 0.5_r8*zincflx(iw)*zcu(jk,iw)
-                  pnifu(ikl) = pnifu(ikl) + 0.5_r8*zincflx(iw)*zfu(jk,iw)
+                  pnicu(ikl) = pnicu(ikl) + 0.445_r8*zincflx(iw)*zcu(jk,iw)
+                  pnifu(ikl) = pnifu(ikl) + 0.445_r8*zincflx(iw)*zfu(jk,iw)
 ! Accumulate direct fluxes for near-IR bands
                else if (ibm == 14 .or. ibm <= 8) then  
                   pnicd(ikl) = pnicd(ikl) + zincflx(iw)*zcd(jk,iw)
