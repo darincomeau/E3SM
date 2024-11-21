@@ -5881,7 +5881,6 @@ contains
                    ptr_col=this%qflx_glcice_melt_diag, l2g_scale_type='ice')
    end if
 
->>>>>>> ca2d658464 (Squashing commits of chloewhicker:cwhicker/elm/smb_h0_fields)
 
     ! As defined here, snow_sources - snow_sinks will equal the change in h2osno at any
     ! given time step but only if there is at least one snow layer (for all landunits
@@ -7561,16 +7560,14 @@ contains
                 c = filter_soilc(fc)
                 this%decomp_cpools_leached(c,l) = 0._r8
              end do
-             if(l /= i_cwd)then
-               do j = 1, nlev
-                 do fc = 1,num_soilc
+             do j = 1, nlev
+                do fc = 1,num_soilc
                    c = filter_soilc(fc)
                    this%decomp_cpools_leached(c,l) = &
                      this%decomp_cpools_leached(c,l) + &
                      this%decomp_cpools_transport_tendency(c,j,l) * dzsoi_decomp(j)
-                 end do
-               end do
-             endif
+                end do
+             end do
              do fc = 1,num_soilc
                 c = filter_soilc(fc)
                 this%som_c_leached(c) = &
@@ -9809,9 +9806,8 @@ contains
           c = filter_soilc(fc)
           this%decomp_npools_leached(c,l) = 0._r8
        end do
-       if(l /= i_cwd)then
-         do j = 1, nlev
-           do fc = 1,num_soilc
+       do j = 1, nlev
+          do fc = 1,num_soilc
              c = filter_soilc(fc)
              this%decomp_npools_leached(c,l) = &
                   this%decomp_npools_leached(c,l) + &
@@ -9819,9 +9815,8 @@ contains
 
              this%bgc_npool_inputs(c,l) = this%bgc_npool_inputs(c,l) + &
                 (this%bgc_npool_ext_inputs_vr(c,j,l)-this%bgc_npool_ext_loss_vr(c,j,l))*dzsoi_decomp(j)
-           end do
-         end do
-       endif
+          end do
+       end do
        do fc = 1,num_soilc
           c = filter_soilc(fc)
           this%som_n_leached(c) = &
@@ -11341,16 +11336,16 @@ contains
           c = filter_soilc(fc)
           this%decomp_ppools_leached(c,l) = 0._r8
        end do
-       if(l /= i_cwd)then
-         do j = 1, nlevdecomp
-           do fc = 1,num_soilc
+
+       do j = 1, nlevdecomp
+          do fc = 1,num_soilc
              c = filter_soilc(fc)
              this%decomp_ppools_leached(c,l) = &
                   this%decomp_ppools_leached(c,l) + &
                   this%decomp_ppools_transport_tendency(c,j,l) * dzsoi_decomp(j)
-           end do
-         end do
-       endif
+          end do
+       end do
+
        do fc = 1,num_soilc
           c = filter_soilc(fc)
           this%som_p_leached(c) = &
