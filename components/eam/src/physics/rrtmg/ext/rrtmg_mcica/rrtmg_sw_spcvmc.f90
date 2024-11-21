@@ -29,7 +29,7 @@
       use rrtmg_sw_taumol, only: taumol_sw
       use rrtmg_sw_vrtqdr, only: vrtqdr_sw
 
-      use radiation_readnl, only: split_rad_asym !DC not working
+!      use radiation_readnl, only: split_rad_asym !DC not working
 
       implicit none
 
@@ -641,7 +641,7 @@
                   endif
 ! band 9 is half-NearIR and half-Visible
                else if (ibm == 9) then
-                  if (split_rad_asym) then
+!                  if (split_rad_asym) then
                      puvcd(ikl) = puvcd(ikl) + vis_frc*zincflx(iw)*zcd(jk,iw)
                      puvfd(ikl) = puvfd(ikl) + vis_frc*zincflx(iw)*zfd(jk,iw)
                      pnicd(ikl) = pnicd(ikl) + nir_frc*zincflx(iw)*zcd(jk,iw)
@@ -659,25 +659,25 @@
                      endif
                      pnicu(ikl) = pnicu(ikl) + nir_frc*zincflx(iw)*zcu(jk,iw)
                      pnifu(ikl) = pnifu(ikl) + nir_frc*zincflx(iw)*zfu(jk,iw)
-                  else
-                     puvcd(ikl) = puvcd(ikl) + 0.5_r8*zincflx(iw)*zcd(jk,iw)
-                     puvfd(ikl) = puvfd(ikl) + 0.5_r8*zincflx(iw)*zfd(jk,iw)
-                     pnicd(ikl) = pnicd(ikl) + 0.5_r8*zincflx(iw)*zcd(jk,iw)
-                     pnifd(ikl) = pnifd(ikl) + 0.5_r8*zincflx(iw)*zfd(jk,iw)
-                     if (idelm .eq. 0) then
-                        puvfddir(ikl) = puvfddir(ikl) + 0.5_r8*zincflx(iw)*ztdbt_nodel(jk)
-                        puvcddir(ikl) = puvcddir(ikl) + 0.5_r8*zincflx(iw)*ztdbtc_nodel(jk)
-                        pnifddir(ikl) = pnifddir(ikl) + 0.5_r8*zincflx(iw)*ztdbt_nodel(jk)
-                        pnicddir(ikl) = pnicddir(ikl) + 0.5_r8*zincflx(iw)*ztdbtc_nodel(jk)
-                     elseif (idelm .eq. 1) then
-                        puvfddir(ikl) = puvfddir(ikl) + 0.5_r8*zincflx(iw)*ztdbt(jk)
-                        puvcddir(ikl) = puvcddir(ikl) + 0.5_r8*zincflx(iw)*ztdbtc(jk)
-                        pnifddir(ikl) = pnifddir(ikl) + 0.5_r8*zincflx(iw)*ztdbt(jk)
-                        pnicddir(ikl) = pnicddir(ikl) + 0.5_r8*zincflx(iw)*ztdbtc(jk)
-                     endif
-                     pnicu(ikl) = pnicu(ikl) + 0.5_r8*zincflx(iw)*zcu(jk,iw)
-                     pnifu(ikl) = pnifu(ikl) + 0.5_r8*zincflx(iw)*zfu(jk,iw)
-                  endif
+!                  else
+!                     puvcd(ikl) = puvcd(ikl) + 0.5_r8*zincflx(iw)*zcd(jk,iw)
+!                     puvfd(ikl) = puvfd(ikl) + 0.5_r8*zincflx(iw)*zfd(jk,iw)
+!                     pnicd(ikl) = pnicd(ikl) + 0.5_r8*zincflx(iw)*zcd(jk,iw)
+!                     pnifd(ikl) = pnifd(ikl) + 0.5_r8*zincflx(iw)*zfd(jk,iw)
+!                     if (idelm .eq. 0) then
+!                        puvfddir(ikl) = puvfddir(ikl) + 0.5_r8*zincflx(iw)*ztdbt_nodel(jk)
+!                        puvcddir(ikl) = puvcddir(ikl) + 0.5_r8*zincflx(iw)*ztdbtc_nodel(jk)
+!                        pnifddir(ikl) = pnifddir(ikl) + 0.5_r8*zincflx(iw)*ztdbt_nodel(jk)
+!                        pnicddir(ikl) = pnicddir(ikl) + 0.5_r8*zincflx(iw)*ztdbtc_nodel(jk)
+!                     elseif (idelm .eq. 1) then
+!                        puvfddir(ikl) = puvfddir(ikl) + 0.5_r8*zincflx(iw)*ztdbt(jk)
+!                        puvcddir(ikl) = puvcddir(ikl) + 0.5_r8*zincflx(iw)*ztdbtc(jk)
+!                        pnifddir(ikl) = pnifddir(ikl) + 0.5_r8*zincflx(iw)*ztdbt(jk)
+!                        pnicddir(ikl) = pnicddir(ikl) + 0.5_r8*zincflx(iw)*ztdbtc(jk)
+!                     endif
+!                     pnicu(ikl) = pnicu(ikl) + 0.5_r8*zincflx(iw)*zcu(jk,iw)
+!                     pnifu(ikl) = pnifu(ikl) + 0.5_r8*zincflx(iw)*zfu(jk,iw)
+!                  endif
 ! Accumulate direct fluxes for near-IR bands
                else if (ibm == 14 .or. ibm <= 8) then  
                   pnicd(ikl) = pnicd(ikl) + zincflx(iw)*zcd(jk,iw)

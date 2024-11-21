@@ -229,7 +229,7 @@ contains
                               use_rad_dt_cosz, spectralflux,   &
                               do_aerosol_rad, do_spa_optics,   &
                               fixed_total_solar_irradiance,    &
-                              split_rad_asym,                  & ! DC 
+!                              split_rad_asym,                  & ! DC 
                               rrtmgp_enable_temperature_warnings
 
       ! Read the namelist, only if called from master process
@@ -260,7 +260,7 @@ contains
       call mpibcast(do_aerosol_rad, 1, mpi_logical, mstrid, mpicom, ierr)
       call mpibcast(do_spa_optics, 1, mpi_logical, mstrid, mpicom, ierr)
       call mpibcast(fixed_total_solar_irradiance, 1, mpi_real8, mstrid, mpicom, ierr)
-      call mpibcast(split_rad_asym, 1, mpi_logical, mstrid, mpicom, ierr) ! DC
+!      call mpibcast(split_rad_asym, 1, mpi_logical, mstrid, mpicom, ierr) ! DC
       call mpibcast(rrtmgp_enable_temperature_warnings, 1, mpi_logical, mstrid, mpicom, ierr)
 #endif
 
@@ -281,7 +281,7 @@ contains
                          iradsw, iradlw, irad_always, &
                          use_rad_dt_cosz, spectralflux, &
                          do_aerosol_rad, do_spa_optics, fixed_total_solar_irradiance, &
-                         split_rad_asym, & ! DC
+!                         split_rad_asym, & ! DC
                          rrtmgp_enable_temperature_warnings
       end if
    10 format('  LW coefficents file: ',                                a/, &
@@ -2023,38 +2023,38 @@ contains
          do icol = 1,size(fluxes%bnd_flux_dn, 1)
 
             ! Direct fluxes
-            if (split_rad_asym) then
+!            if (split_rad_asym) then
                cam_out%soll(icol) &
                   = sum(fluxes%bnd_flux_dn_dir(icol,kbot+1,1:9)) &
                   + nir_frc * fluxes%bnd_flux_dn_dir(icol,kbot+1,10)
                cam_out%sols(icol) &
                   = vis_frc * fluxes%bnd_flux_dn_dir(icol,kbot+1,10) &
                   + sum(fluxes%bnd_flux_dn_dir(icol,kbot+1,11:14))
-            else
-               cam_out%soll(icol) &
-                  = sum(fluxes%bnd_flux_dn_dir(icol,kbot+1,1:9)) &
-                  + 0.5_r8 * fluxes%bnd_flux_dn_dir(icol,kbot+1,10)
-               cam_out%sols(icol) &
-                  = 0.5_r8 * fluxes%bnd_flux_dn_dir(icol,kbot+1,10) &
-                  + sum(fluxes%bnd_flux_dn_dir(icol,kbot+1,11:14))
-            endif
+!            else
+!               cam_out%soll(icol) &
+!                  = sum(fluxes%bnd_flux_dn_dir(icol,kbot+1,1:9)) &
+!                  + 0.5_r8 * fluxes%bnd_flux_dn_dir(icol,kbot+1,10)
+!               cam_out%sols(icol) &
+!                  = 0.5_r8 * fluxes%bnd_flux_dn_dir(icol,kbot+1,10) &
+!                  + sum(fluxes%bnd_flux_dn_dir(icol,kbot+1,11:14))
+!            endif
 
             ! Diffuse fluxes
-            if (split_rad_asym) then
+!            if (split_rad_asym) then
                cam_out%solld(icol) &
                   = sum(flux_dn_diffuse(icol,kbot+1,1:9)) &
                   + nir_frc * flux_dn_diffuse(icol,kbot+1,10)
                cam_out%solsd(icol) &
                   = vis_frc * flux_dn_diffuse(icol,kbot+1,10) &
                   + sum(flux_dn_diffuse(icol,kbot+1,11:14))
-            else
-               cam_out%solld(icol) &
-                  = sum(flux_dn_diffuse(icol,kbot+1,1:9)) &
-                  + 0.5_r8 * flux_dn_diffuse(icol,kbot+1,10)
-               cam_out%solsd(icol) &
-                  = 0.5_r8 * flux_dn_diffuse(icol,kbot+1,10) &
-                  + sum(flux_dn_diffuse(icol,kbot+1,11:14))
-            endif
+!            else
+!               cam_out%solld(icol) &
+!                  = sum(flux_dn_diffuse(icol,kbot+1,1:9)) &
+!                  + 0.5_r8 * flux_dn_diffuse(icol,kbot+1,10)
+!               cam_out%solsd(icol) &
+!                  = 0.5_r8 * flux_dn_diffuse(icol,kbot+1,10) &
+!                  + sum(flux_dn_diffuse(icol,kbot+1,11:14))
+!            endif
 
             ! Net shortwave flux at surface
             cam_out%netsw(icol) = fluxes%flux_net(icol,kbot+1)
@@ -2296,13 +2296,13 @@ contains
             ! Band straddles the visible to near-infrared transition, so we take
             ! the albedo to be the average of the visible and near-infrared
             ! broadband albedos
-            if (split_rad_asym) then
+!            if (split_rad_asym) then
                albedo_dir(iband,1:ncol) = nir_frc * (cam_in%aldir(1:ncol) + cam_in%asdir(1:ncol))
                albedo_dif(iband,1:ncol) = nir_frc * (cam_in%aldif(1:ncol) + cam_in%asdif(1:ncol))
-            else
-               albedo_dir(iband,1:ncol) = 0.5 * (cam_in%aldir(1:ncol) + cam_in%asdir(1:ncol))
-               albedo_dif(iband,1:ncol) = 0.5 * (cam_in%aldif(1:ncol) + cam_in%asdif(1:ncol))
-            endif
+!            else
+!               albedo_dir(iband,1:ncol) = 0.5 * (cam_in%aldir(1:ncol) + cam_in%asdir(1:ncol))
+!               albedo_dif(iband,1:ncol) = 0.5 * (cam_in%aldif(1:ncol) + cam_in%asdif(1:ncol))
+!            endif
 
          end if
       end do

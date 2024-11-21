@@ -661,12 +661,12 @@ end function radiation_nextsw_cday
           call addfld ('SWCF'//diag(icall),  horiz_only,     'A',   'W/m2', 'Shortwave cloud forcing', &
                        sampling_seq='rad_lwsw', flag_xyfill=.true., &
                        standard_name='toa_shortwave_cloud_radiative_effect')
-          call addfld('SD_SPLT_BND'//diag(icall),  horiz_only,     'A',   'W/m2', 'Downwelling Surface Flux in Band 9', &
-                       sampling_seq='rad_lwsw', flag_xyfill=.true., &
-                       standard_name='downwelling_surface_flux_band_nine')
-          call addfld('SU_SPLT_BND'//diag(icall),  horiz_only,     'A',   'W/m2', 'Upwelling Surface Flux in Band 9', &
-                       sampling_seq='rad_lwsw', flag_xyfill=.true., &
-                       standard_name='downwelling_surface_flux_band_nine')
+!          call addfld('SD_SPLT_BND'//diag(icall),  horiz_only,     'A',   'W/m2', 'Downwelling Surface Flux in Band 9', &
+!                       sampling_seq='rad_lwsw', flag_xyfill=.true., &
+!                       standard_name='downwelling_surface_flux_band_nine')
+!          call addfld('SU_SPLT_BND'//diag(icall),  horiz_only,     'A',   'W/m2', 'Upwelling Surface Flux in Band 9', &
+!                       sampling_seq='rad_lwsw', flag_xyfill=.true., &
+!                       standard_name='downwelling_surface_flux_band_nine')
 
           if (history_amwg) then
              call add_default('SOLIN'//diag(icall),   1, ' ')
@@ -1016,8 +1016,8 @@ end function radiation_nextsw_cday
     real(r8) fsn200c(pcols)       ! fcns interpolated to 200 mb
     real(r8) fnl(pcols,pverp)     ! net longwave flux
     real(r8) fcnl(pcols,pverp)    ! net clear-sky longwave flux
-    real(r8) sd_splt_bnd(pcols)   ! JPT downwelling surface flux in split rrtmg_sw band
-    real(r8) su_splt_bnd(pcols)   ! JPT upwelling   surface flux in split rrtmg_sw band
+!    real(r8) sd_splt_bnd(pcols)   ! JPT downwelling surface flux in split rrtmg_sw band
+!    real(r8) su_splt_bnd(pcols)   ! JPT upwelling   surface flux in split rrtmg_sw band
 
     real(r8) pbr(pcols,pver)      ! Model mid-level pressures (dynes/cm2)
     real(r8) pnm(pcols,pverp)     ! Model interface pressures (dynes/cm2)
@@ -1311,8 +1311,8 @@ end function radiation_nextsw_cday
                        old_convert = .false.)
                   call t_stopf ('rad_rrtmg_sw')
 
-                  sd_splt_bnd(:) = sd(:,1,9) !JPT
-                  su_splt_bnd(:) = su(:,1,9) !JPT
+!                  sd_splt_bnd(:) = sd(:,1,9) !JPT
+!                  su_splt_bnd(:) = su(:,1,9) !JPT
 
                   !  Output net fluxes at 200 mb
                   call vertinterp(ncol, pcols, pverp, state%pint, 20000._r8, fcns, fsn200c)
@@ -1383,8 +1383,8 @@ end function radiation_nextsw_cday
                   call outfld('FSN200'//diag(icall),fsn200,pcols,lchnk)
                   call outfld('FSN200C'//diag(icall),fsn200c,pcols,lchnk)
                   call outfld('SWCF'//diag(icall),swcf  ,pcols,lchnk)
-                  call outfld('SD_SPLT_BND'//diag(icall),sd_splt_bnd ,pcols,lchnk) ! JPT downwelling surface flux in band 9
-                  call outfld('SU_SPLT_BND'//diag(icall),su_splt_bnd ,pcols,lchnk) ! JPT upwelling   surface flux in band 9
+!                  call outfld('SD_SPLT_BND'//diag(icall),sd_splt_bnd ,pcols,lchnk) ! JPT downwelling surface flux in band 9
+!                  call outfld('SU_SPLT_BND'//diag(icall),su_splt_bnd ,pcols,lchnk) ! JPT upwelling   surface flux in band 9
 
               end if ! (active_calls(icall))
           end do ! icall
