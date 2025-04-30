@@ -3361,8 +3361,8 @@ contains
 
        do iCell = 1, nCellsSolve
 
-          bergFreshwaterFlux(iCell) = bergFreshwaterFluxData(iCell)
-          bergLatentHeatFlux(iCell) = -bergFreshwaterFluxData(iCell) * seaiceLatentHeatMelting
+          bergFreshwaterFlux(iCell) = scaling * bergFreshwaterFluxData(iCell)
+          bergLatentHeatFlux(iCell) = -scaling * bergFreshwaterFluxData(iCell) * seaiceLatentHeatMelting
        enddo
 
        block => block % next
