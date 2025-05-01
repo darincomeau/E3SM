@@ -3298,7 +3298,8 @@ contains
   subroutine get_data_iceberg_fluxes(domain)
 
     use seaice_constants, only: &
-         seaiceLatentHeatMelting ! latent heat of melting of fresh ice (J/kg)
+         seaiceLatentHeatMelting, & ! latent heat of melting of fresh ice (J/kg)
+         seaiceFreshIceSpecificHeat ! specific heat of fresh ice (J/kg/K)
 
     type(domain_type), intent(inout) :: &
          domain
@@ -3323,6 +3324,7 @@ contains
          bergLatentHeatFlux ! iceberg latent heat flux for ocean (J/m^2/s)
 
     real(kind=RKIND), pointer :: &
+         bergTemperature, & ! iceberg temperature
          areaIntegAnnMeanDataIcebergIceShelfFreshwaterFlux, & ! area integrated, annual mean freshwater flux from icebegs and ice shelves (kg/s)
          runningMeanRemovedIceRunoff ! the area integrated, running mean of removed ice runoff (kg/s)
 
@@ -3331,6 +3333,9 @@ contains
 
     real(kind=RKIND) :: &
          scaling
+
+    call MPAS_pool_get_config(domain % configs, "config_iceberg_temperature", &
+                              bergTemperature)
 
     call MPAS_pool_get_config(domain % configs, "config_scale_dib_by_removed_ice_runoff", &
                               config_scale_dib_by_removed_ice_runoff)
@@ -3362,7 +3367,8 @@ contains
        do iCell = 1, nCellsSolve
 
           bergFreshwaterFlux(iCell) = scaling * bergFreshwaterFluxData(iCell)
-          bergLatentHeatFlux(iCell) = -scaling * bergFreshwaterFluxData(iCell) * seaiceLatentHeatMelting
+          bergLatentHeatFlux(iCell) = -scaling * bergFreshwaterFluxData(iCell) * &
+                                     (seaiceLatentHeatMelting - seaiceFreshIceSpecificHeat*bergTemperature)
        enddo
 
        block => block % next
