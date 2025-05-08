@@ -468,19 +468,19 @@
       </pes>
     </mach>
   </grid>
-  <grid name="a%T62.+oi%oEC60to30|a%TL319.+oi%oEC60to30">
-    <mach name="onyx|warhawk|narwhal">
+  <grid name="a%T62.+oi%oEC60to30|a%TL319.+oi%oEC60to30|a%TL319.+oi%EC30to60">
+    <mach name="onyx|warhawk|narwhal|carpenter|blueback">
       <pes compset=".*MPASCICE.+MPASO.+|.*MPASSI.+MPASO.+" pesize="any">
         <comment>none</comment>
         <ntasks>
-          <ntasks_atm>64</ntasks_atm>
-          <ntasks_lnd>64</ntasks_lnd>
-          <ntasks_rof>64</ntasks_rof>
-          <ntasks_ice>256</ntasks_ice>
-          <ntasks_ocn>896</ntasks_ocn>
-          <ntasks_glc>64</ntasks_glc>
-          <ntasks_wav>64</ntasks_wav>
-          <ntasks_cpl>256</ntasks_cpl>
+          <ntasks_atm>96</ntasks_atm>
+          <ntasks_lnd>1</ntasks_lnd>
+          <ntasks_rof>96</ntasks_rof>
+          <ntasks_ice>768</ntasks_ice>
+          <ntasks_ocn>640</ntasks_ocn>
+          <ntasks_glc>1</ntasks_glc>
+          <ntasks_wav>1</ntasks_wav>
+          <ntasks_cpl>96</ntasks_cpl>
         </ntasks>
         <nthrds>
           <nthrds_atm>1</nthrds_atm>
@@ -497,7 +497,7 @@
           <rootpe_lnd>0</rootpe_lnd>
           <rootpe_rof>0</rootpe_rof>
           <rootpe_ice>0</rootpe_ice>
-          <rootpe_ocn>256</rootpe_ocn>
+          <rootpe_ocn>768</rootpe_ocn>
           <rootpe_glc>0</rootpe_glc>
           <rootpe_wav>0</rootpe_wav>
           <rootpe_cpl>0</rootpe_cpl>
@@ -506,7 +506,7 @@
     </mach>
   </grid>
   <grid name="a%T62.+oi%oARRM60to10|a%TL319.+oi%oARRM60to10|a%T62.+oi%ARRM10to60|a%TL319.+oi%ARRM10to60">
-    <mach name="onyx|warhawk|narwhal">
+    <mach name="onyx|warhawk|narwhal|carpenter|blueback">
       <pes compset=".*MPASCICE.+MPASO.+|.*MPASSI.+MPASO.+" pesize="any">
         <comment>none</comment>
         <ntasks>
@@ -543,7 +543,7 @@
     </mach>
   </grid>
   <grid name="a%T62.+oi%oARRM60to6|a%TL319.+oi%oARRM60to6">
-    <mach name="onyx|warhawk|narwhal">
+    <mach name="onyx|warhawk|narwhal|carpenter|blueback">
       <pes compset=".*MPASCICE.+MPASO.+" pesize="any">
         <comment>none</comment>
         <ntasks>
