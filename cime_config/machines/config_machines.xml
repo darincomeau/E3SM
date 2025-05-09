@@ -5379,12 +5379,12 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
       </arguments>
     </mpirun>
     <module_system type="module">
-      <init_path lang="perl">/opt/cray/pe/modules/3.2.11.5/init/perl.pm</init_path>
-      <init_path lang="python">/opt/cray/pe/modules/3.2.11.5/init/python.py</init_path>
-      <init_path lang="sh">/opt/cray/pe/modules/3.2.11.5/init/sh</init_path>
-      <init_path lang="csh">/opt/cray/pe/modules/3.2.11.5/init/csh</init_path>
-      <cmd_path lang="perl">/opt/cray/pe/modules/3.2.11.5/bin/modulecmd perl</cmd_path>
-      <cmd_path lang="python">/opt/cray/pe/modules/3.2.11.5/bin/modulecmd python</cmd_path>
+      <init_path lang="perl">/opt/cray/pe/modules/3.2.11.7/init/perl.pm</init_path>
+      <init_path lang="python">/opt/cray/pe/modules/3.2.11.7/init/python.py</init_path>
+      <init_path lang="sh">/opt/cray/pe/modules/3.2.11.7/init/sh</init_path>
+      <init_path lang="csh">/opt/cray/pe/modules/3.2.11.7/init/csh</init_path>
+      <cmd_path lang="perl">/opt/cray/pe/modules/3.2.11.7/bin/modulecmd perl</cmd_path>
+      <cmd_path lang="python">/opt/cray/pe/modules/3.2.11.7/bin/modulecmd python</cmd_path>
       <cmd_path lang="sh">module</cmd_path>
       <cmd_path lang="csh">module</cmd_path>
       <modules>
@@ -5403,32 +5403,33 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
       </modules>
 
       <modules compiler="intel">
-        <command name="load">PrgEnv-intel/8.0.0</command>
+        <command name="load">PrgEnv-intel/8.3.3</command>
         <command name="rm">intel</command>
         <command name="rm">intel-classic</command>
-        <command name="load">intel-classic/2021.3.0</command>
+        <command name="load">intel-classic/2022.2.1</command>
         <command name="rm">cray-mpich</command>
-        <command name="load">cray-mpich/8.1.14</command>
-        <command name="load">cray-netcdf/4.7.4.7</command>
-        <command name="load">cray-hdf5/1.12.0.7</command>
-        <command name="load">cray-parallel-netcdf/1.12.1.7</command>
+        <command name="load">cray-mpich/8.1.21</command>
+        <command name="load">cray-netcdf/4.9.0.1</command>
+        <command name="load">cray-hdf5/1.12.2.1</command>
+        <command name="load">cray-parallel-netcdf/1.12.3.1</command>
         <command name="rm">cray-libsci</command>
-        <command name="load">cray-libsci/21.08.1.2</command>
+        <command name="load">cray-libsci/22.08.1.1</command>
       </modules>
     </module_system>
     <RUNDIR>$CIME_OUTPUT_ROOT/$CASE/run</RUNDIR>
     <EXEROOT>$CIME_OUTPUT_ROOT/$CASE/bld</EXEROOT>
     <TEST_TPUT_TOLERANCE>0.1</TEST_TPUT_TOLERANCE>
     <environment_variables>
+      <env name="NETCDF_PATH">$ENV{NETCDF_DIR}</env>
+      <env name="PNETCDF_PATH">$ENV{PNETCDF_DIR}</env>
+      <env name="HDF5_ROOT"/>
       <env name="MPICH_ENV_DISPLAY">1</env>
       <env name="MPICH_VERSION_DISPLAY">1</env>
-      <!--env name="NETCDF_DIR">/opt/cray/pe/netcdf/4.7.4.0/intel/19.1</env-->
+      <env name="FI_CXI_RX_MATCH_MODE">hybrid</env>
       <!--env name="MPICH_CPUMASK_DISPLAY">1</env-->
-
       <env name="OMP_STACKSIZE">64M</env>
       <env name="OMP_PROC_BIND">spread</env>
       <env name="OMP_PLACES">threads</env>
-
       <!--env name="HDF5_DISABLE_VERSION_CHECK">2</env-->
       <env name="HDF5_USE_FILE_LOCKING">FALSE</env>
     </environment_variables>
@@ -5632,11 +5633,9 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
       <env name="FI_CXI_RX_MATCH_MODE">hybrid</env>
       <env name="NETCDF_DIR">/opt/cray/pe/netcdf/4.9.0.3/INTEL/19.0</env>
       <!--env name="MPICH_CPUMASK_DISPLAY">1</env-->
-
       <env name="OMP_STACKSIZE">64M</env>
       <env name="OMP_PROC_BIND">spread</env>
       <env name="OMP_PLACES">threads</env>
-
       <!--env name="HDF5_DISABLE_VERSION_CHECK">2</env-->
       <env name="HDF5_USE_FILE_LOCKING">FALSE</env>
     </environment_variables>
