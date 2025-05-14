@@ -282,6 +282,7 @@
       <value mach="narwhal">netcdf</value>
       <value mach="warhawk">netcdf</value>
       <value mach="blueback">netcdf</value>
+      <value mach="carpenter">netcdf</value>
     </values>
   </entry>
 
