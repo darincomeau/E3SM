@@ -834,6 +834,7 @@ if ($OCN_GLC_ISMF_COUPLING eq 'coupler') {
 # Namelist group: land_ice #
 ############################
 
+add_default($nl, 'config_land_ice_draft_mode');
 add_default($nl, 'config_land_ice_rho_ocean');
 
 ###################################
