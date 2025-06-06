@@ -268,7 +268,7 @@ def buildnml(case, caseroot, compname):
             ic_date = '210203'
             ic_prefix = 'mpaso.SOwISC12to60E2r4.rstFromG-anvil'
         if ocn_ismf == 'data':
-            data_ismf_file = 'prescribed_ismf_adusumilli2020.SOwISC12to60E2r4.230516.nc'
+            data_ismf_file = 'prescribed_ismf_v2_1.SORRM.historical_0751-yrs2010-2014.nc'
 
     elif ocn_grid == 'ECwISC30to60E2r1':
         decomp_date = '200915'
