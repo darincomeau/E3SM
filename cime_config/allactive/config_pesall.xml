@@ -2274,7 +2274,7 @@
     </mach>
   </grid>
   <grid name="a%ne30.+oi%oARRM60to10|a%ne30.+oi%ARRM10to60">
-    <mach name="onyx|warhawk|narwhal|blueback|carpenter">
+    <mach name="any">
       <pes compset=".*EAM.+ELM.+MPASSI.+MPASO.+MOSART.+SGLC" pesize="any">
         <comment>none</comment>
         <ntasks>
@@ -2311,7 +2311,7 @@
     </mach>
   </grid>
   <grid name="a%ne0np4_arcticx4.+oi%oARRM60to10|a%ne0np4_arcticx4.+oi%ARRM10to60">
-    <mach name="onyx|warhawk|narwhal|blueback|carpenter">
+    <mach name="any">
       <pes compset=".*EAM.+ELM.+MPASSI.+MPASO.+MOSART.+SGLC" pesize="any">
         <comment>none</comment>
         <ntasks>
