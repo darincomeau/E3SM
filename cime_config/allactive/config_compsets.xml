@@ -66,6 +66,11 @@
 </compset>
 
 <compset>
+  <alias>WCYCL1950-4xCO2</alias>
+  <lname>1950SOI_EAM%CMIP6-4xCO2_ELM%SPBC_MPASSI_MPASO_MOSART_SGLC_SWAV</lname>
+</compset>
+
+<compset>
   <alias>WCYCL20TR</alias>
   <lname>20TRSOI_EAM%CMIP6_ELM%SPBC_MPASSI_MPASO_MOSART_SGLC_SWAV</lname>
 </compset>
