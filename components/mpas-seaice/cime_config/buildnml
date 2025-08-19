@@ -210,6 +210,24 @@ def buildnml(case, caseroot, compname):
             grid_date = '220802'
             grid_prefix = 'mpassi.ARRM10to60E2r1.rstFrom1monthG-chrys'
 
+    elif ice_grid == 'ARRMwISC3to18E3r1':
+        decomp_date = '20240619'
+        decomp_prefix = 'partitions/mpas-seaice.graph.info.'
+        grid_date = '241022'
+        grid_prefix = 'mpassi.ARRMwISC3to18E3r1.rstFromG-pm'
+        if ice_ic_mode == 'spunup':
+            grid_date = '240701'
+            grid_prefix = 'mpassi.ARRMwISC3to18E3r1.rstFrom1monthG-chrys'
+
+    elif ice_grid == 'ARRMwISC2p4to18E3r1':
+        decomp_date = '20240808'
+        decomp_prefix = 'partitions/mpas-seaice.graph.info.'
+        grid_date = '20250415'
+        grid_prefix = 'mpassi.ARRMwISC2p4to18E3r1.rstFromG-pm'
+        if ice_ic_mode == 'spunup':
+            grid_date = '240701'
+            grid_prefix = 'mpassi.ARRMwISC2p4to18E3r1.rstFrom1monthG-chrys'
+
     elif ice_grid == 'EC30to60E2r2':
         decomp_date = '230313'
         decomp_prefix = 'partitions/mpas-seaice.graph.info.'
@@ -488,7 +506,7 @@ def buildnml(case, caseroot, compname):
             lines.append('<immutable_stream name="mesh"')
             lines.append('                  type="none"')
             if ice_grid.startswith("oRRS1") or ice_grid.startswith("FRIS") \
-                    or ice_grid.startswith("RRSwISC6"):
+                    or ice_grid.startswith("RRSwISC6") or ice_grid.startswith("ARRMwISC"):
                 lines.append('                  io_type="pnetcdf,cdf5"')
             else:
                 lines.append('                  io_type="{}"'.format(ice_pio_typename))
@@ -498,7 +516,7 @@ def buildnml(case, caseroot, compname):
             lines.append('<immutable_stream name="input"')
             lines.append('                  type="input"')
             if ice_grid.startswith("oRRS1") or ice_grid.startswith("FRIS") \
-                    or ice_grid.startswith("RRSwISC6"):
+                    or ice_grid.startswith("RRSwISC6") or ice_grid.startswith("ARRMwISC"):
                 lines.append('                  io_type="pnetcdf,cdf5"')
             else:
                 lines.append('                  io_type="{}"'.format(ice_pio_typename))
@@ -521,7 +539,7 @@ def buildnml(case, caseroot, compname):
             lines.append('<immutable_stream name="restart"')
             lines.append('                  type="input;output"')
             if ice_grid.startswith("oRRS1") or ice_grid.startswith("FRIS") \
-                    or ice_grid.startswith("RRSwISC6"):
+                    or ice_grid.startswith("RRSwISC6") or ice_grid.startswith("ARRMwISC"):
                 lines.append('                  io_type="pnetcdf,cdf5"')
             else:
                 lines.append('                  io_type="{}"'.format(ice_pio_typename))
@@ -538,7 +556,7 @@ def buildnml(case, caseroot, compname):
                 lines.append('<immutable_stream name="restart_ic"')
                 lines.append('                  type="input"')
                 if ice_grid.startswith("oRRS1") or ice_grid.startswith("FRIS") \
-                        or ice_grid.startswith("RRSwISC6"):
+                        or ice_grid.startswith("RRSwISC6") or ice_grid.startswith("ARRMwISC"):
                         lines.append('                  io_type="pnetcdf,cdf5"')
                 else:
                     lines.append('                  io_type="{}"'.format(ice_pio_typename))
