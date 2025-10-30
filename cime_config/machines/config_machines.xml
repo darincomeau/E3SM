@@ -5542,18 +5542,18 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
       </modules>
 
       <modules compiler="intel">
-        <command name="load">PrgEnv-intel/8.5.0</command>
+        <command name="load">PrgEnv-intel/8.6.0</command>
         <command name="rm">intel</command>
         <command name="rm">intel-classic</command>
         <command name="load">intel-classic/2023.2.0</command>
         <command name="rm">cray-mpich</command>
-        <command name="load">cray-mpich/8.1.30</command>
+        <command name="load">cray-mpich/8.1.31</command>
         <command name="load">cray-pals/1.2.11</command>
-        <command name="load">cray-netcdf/4.9.0.13</command>
-        <command name="load">cray-hdf5/1.14.3.1</command>
-        <command name="load">cray-parallel-netcdf/1.12.3.13</command>
+        <command name="load">cray-netcdf/4.9.0.15</command>
+        <command name="load">cray-hdf5/1.14.3.3</command>
+        <command name="load">cray-parallel-netcdf/1.12.3.15</command>
         <command name="rm">cray-libsci</command>
-        <command name="load">cray-libsci/24.07.0</command>
+        <command name="load">cray-libsci/24.11.0</command>
       </modules>
     </module_system>
     <RUNDIR>$CIME_OUTPUT_ROOT/$CASE/run</RUNDIR>

@@ -3,12 +3,12 @@ if (COMP_NAME STREQUAL gptl)
   string(APPEND CPPDEFS " -DHAVE_NANOTIME -DBIT64 -DHAVE_SLASHPROC -DHAVE_GETTIMEOFDAY")
 endif()
 
-#set(MPICC "cc")
-#set(MPICXX "CC")
-#set(MPIFC "ftn")
-#set(SCC "icx")
-set(SCXX "icpx")
-#set(SFC "ifx")
+set(MPICC "cc")
+set(MPICXX "CC")
+set(MPIFC "ftn")
+set(SCC "cc")
+set(SCXX "CC")
+set(SFC "ftn")
 
 
 # fp-model source does not work on in mpicxx, this seems to be a compiler bug, need to manually switch to precise
