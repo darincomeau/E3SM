@@ -5405,17 +5405,18 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
     <CCSM_CPRNC>/p/work1/projects/RASM/tools/cprnc/cprnc</CCSM_CPRNC>
     <GMAKE_J>8</GMAKE_J>
     <TESTS>e3sm_developer</TESTS>
-    <BATCH_SYSTEM>pbs</BATCH_SYSTEM>
-    <SUPPORTED_BY>e3sm</SUPPORTED_BY>
+    <BATCH_SYSTEM>nersc_slurm</BATCH_SYSTEM>
+    <SUPPORTED_BY>rasm</SUPPORTED_BY>
     <MAX_TASKS_PER_NODE>128</MAX_TASKS_PER_NODE>
     <MAX_MPITASKS_PER_NODE>128</MAX_MPITASKS_PER_NODE>
-    <PROJECT_REQUIRED>TRUE</PROJECT_REQUIRED>
     <mpirun mpilib="default">
-      <executable>aprun</executable>
+      <executable>srun</executable>
       <arguments>
-        <arg name="num_tasks">-n {{ total_tasks }}</arg>
-        <arg name="tasks_per_node">-N $SHELL{if [ `./xmlquery --value MAX_MPITASKS_PER_NODE` -gt `./xmlquery --value TOTAL_TASKS` ];then echo `./xmlquery --value TOTAL_TASKS`;else echo `./xmlquery --value MAX_MPITASKS_PER_NODE`;fi;}</arg>
-        <arg name="hyperthreading">--cc depth -d $SHELL{echo `./xmlquery --value MAX_TASKS_PER_NODE`/`./xmlquery --value MAX_MPITASKS_PER_NODE`|bc} -j $SHELL{if [ 64 -ge `./xmlquery --value MAX_TASKS_PER_NODE` ];then echo 1;else echo `./xmlquery --value MAX_TASKS_PER_NODE`/64|bc;fi;}</arg>
+        <arg name="label"> --label</arg>
+        <arg name="num_tasks"> -n {{ total_tasks }} -N {{ num_nodes }}</arg>
+        <arg name="thread_count">-c $SHELL{echo 192/`./xmlquery --value MAX_MPITASKS_PER_NODE`|bc}</arg>
+        <arg name="binding"> $SHELL{if [ 128 -ge `./xmlquery --value MAX_MPITASKS_PER_NODE` ]; then echo "--cpu_bind=cores"; else echo "--cpu_bind=threads";fi;} </arg>
+        <arg name="placement"> -m plane=$SHELL{echo `./xmlquery --value MAX_MPITASKS_PER_NODE`}</arg>
       </arguments>
     </mpirun>
     <module_system type="module">
