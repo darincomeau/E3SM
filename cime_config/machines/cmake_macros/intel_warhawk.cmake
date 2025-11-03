@@ -6,9 +6,9 @@ endif()
 set(MPICC "cc")
 set(MPICXX "CC")
 set(MPIFC "ftn")
-set(SCC "cc")
-set(SCXX "CC")
-set(SFC "ftn")
+#set(SCC "icx")
+set(SCXX "icpx")
+#set(SFC "ifx")
 
 
 # fp-model source does not work on in mpicxx, this seems to be a compiler bug, need to manually switch to precise

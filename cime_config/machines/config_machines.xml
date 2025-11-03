@@ -5536,6 +5536,7 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
         <command name="rm">intel</command>
         <command name="rm">gcc</command>
         <command name="rm">cray-mpich</command>
+        <command name="rm">cray-mpich-ucx</command>
         <command name="rm">cray-hdf5</command>
         <command name="rm">cray-hdf5-parallel</command>
         <command name="rm">cray-netcdf</command>
@@ -5549,7 +5550,8 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
         <command name="rm">intel-classic</command>
         <command name="load">intel-classic/2023.2.0</command>
         <command name="rm">cray-mpich</command>
-        <command name="load">cray-mpich/8.1.31</command>
+        <command name="rm">cray-mpich-ucx</command>
+        <command name="load">cray-mpich-ucx/8.1.31</command>
         <command name="load">cray-pals/1.2.11</command>
         <command name="load">cray-netcdf/4.9.0.15</command>
         <command name="load">cray-hdf5/1.14.3.3</command>
