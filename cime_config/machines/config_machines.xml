@@ -5404,17 +5404,18 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
     <CCSM_CPRNC>/p/work1/projects/RASM/tools/cprnc/cprnc</CCSM_CPRNC>
     <GMAKE_J>8</GMAKE_J>
     <TESTS>e3sm_developer</TESTS>
-    <BATCH_SYSTEM>pbs</BATCH_SYSTEM>
-    <SUPPORTED_BY>e3sm</SUPPORTED_BY>
+    <BATCH_SYSTEM>nersc_slurm</BATCH_SYSTEM>
+    <SUPPORTED_BY>rasm</SUPPORTED_BY>
     <MAX_TASKS_PER_NODE>128</MAX_TASKS_PER_NODE>
     <MAX_MPITASKS_PER_NODE>128</MAX_MPITASKS_PER_NODE>
-    <PROJECT_REQUIRED>TRUE</PROJECT_REQUIRED>
     <mpirun mpilib="default">
-      <executable>aprun</executable>
+      <executable>srun</executable>
       <arguments>
-        <arg name="num_tasks">-n {{ total_tasks }}</arg>
-        <arg name="tasks_per_node">-N $SHELL{if [ `./xmlquery --value MAX_MPITASKS_PER_NODE` -gt `./xmlquery --value TOTAL_TASKS` ];then echo `./xmlquery --value TOTAL_TASKS`;else echo `./xmlquery --value MAX_MPITASKS_PER_NODE`;fi;}</arg>
-        <arg name="hyperthreading">--cc depth -d $SHELL{echo `./xmlquery --value MAX_TASKS_PER_NODE`/`./xmlquery --value MAX_MPITASKS_PER_NODE`|bc} -j $SHELL{if [ 64 -ge `./xmlquery --value MAX_TASKS_PER_NODE` ];then echo 1;else echo `./xmlquery --value MAX_TASKS_PER_NODE`/64|bc;fi;}</arg>
+        <arg name="label"> --label</arg>
+        <arg name="num_tasks"> -n {{ total_tasks }} -N {{ num_nodes }}</arg>
+        <arg name="thread_count">-c $SHELL{echo 192/`./xmlquery --value MAX_MPITASKS_PER_NODE`|bc}</arg>
+        <arg name="binding"> $SHELL{if [ 128 -ge `./xmlquery --value MAX_MPITASKS_PER_NODE` ]; then echo "--cpu_bind=cores"; else echo "--cpu_bind=threads";fi;} </arg>
+        <arg name="placement"> -m plane=$SHELL{echo `./xmlquery --value MAX_MPITASKS_PER_NODE`}</arg>
       </arguments>
     </mpirun>
     <module_system type="module">
@@ -5434,6 +5435,7 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
         <command name="rm">PrgEnv-aocc</command>
         <command name="rm">intel</command>
         <command name="rm">cray-mpich</command>
+        <command name="rm">cray-mpich-ucx</command>
         <command name="rm">cray-hdf5</command>
         <command name="rm">cray-hdf5-parallel</command>
         <command name="rm">cray-netcdf</command>
@@ -5442,17 +5444,18 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
       </modules>
 
       <modules compiler="intel">
-        <command name="load">PrgEnv-intel/8.3.3</command>
+        <command name="load">PrgEnv-intel/8.4.0</command>
         <command name="rm">intel</command>
         <command name="rm">intel-classic</command>
         <command name="load">intel-classic/2022.2.1</command>
         <command name="rm">cray-mpich</command>
-        <command name="load">cray-mpich/8.1.21</command>
-        <command name="load">cray-netcdf/4.9.0.1</command>
-        <command name="load">cray-hdf5/1.12.2.1</command>
-        <command name="load">cray-parallel-netcdf/1.12.3.1</command>
+        <command name="rm">cray-mpich-ucx</command>
+        <command name="load">cray-mpich-ucx/8.1.26</command>
+        <command name="load">cray-netcdf/4.9.0.3</command>
+        <command name="load">cray-hdf5/1.12.2.3</command>
+        <command name="load">cray-parallel-netcdf/1.12.3.3</command>
         <command name="rm">cray-libsci</command>
-        <command name="load">cray-libsci/22.08.1.1</command>
+        <command name="load">cray-libsci/23.05.1.4</command>
       </modules>
     </module_system>
     <RUNDIR>$CIME_OUTPUT_ROOT/$CASE/run</RUNDIR>
@@ -5532,6 +5535,7 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
         <command name="rm">intel</command>
         <command name="rm">gcc</command>
         <command name="rm">cray-mpich</command>
+        <command name="rm">cray-mpich-ucx</command>
         <command name="rm">cray-hdf5</command>
         <command name="rm">cray-hdf5-parallel</command>
         <command name="rm">cray-netcdf</command>
@@ -5540,18 +5544,19 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
       </modules>
 
       <modules compiler="intel">
-        <command name="load">PrgEnv-intel/8.5.0</command>
+        <command name="load">PrgEnv-intel/8.6.0</command>
         <command name="rm">intel</command>
         <command name="rm">intel-classic</command>
         <command name="load">intel-classic/2023.2.0</command>
         <command name="rm">cray-mpich</command>
-        <command name="load">cray-mpich/8.1.30</command>
+        <command name="rm">cray-mpich-ucx</command>
+        <command name="load">cray-mpich-ucx/8.1.31</command>
         <command name="load">cray-pals/1.2.11</command>
-        <command name="load">cray-netcdf/4.9.0.13</command>
-        <command name="load">cray-hdf5/1.14.3.1</command>
-        <command name="load">cray-parallel-netcdf/1.12.3.13</command>
+        <command name="load">cray-netcdf/4.9.0.15</command>
+        <command name="load">cray-hdf5/1.14.3.3</command>
+        <command name="load">cray-parallel-netcdf/1.12.3.15</command>
         <command name="rm">cray-libsci</command>
-        <command name="load">cray-libsci/24.07.0</command>
+        <command name="load">cray-libsci/24.11.0</command>
       </modules>
     </module_system>
     <RUNDIR>$CIME_OUTPUT_ROOT/$CASE/run</RUNDIR>
