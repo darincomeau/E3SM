@@ -10,7 +10,6 @@ endif()
 set(SCXX "icpx")
 #set(SFC "ifx")
 
-
 # fp-model source does not work on in mpicxx, this seems to be a compiler bug, need to manually switch to precise
 set(CMAKE_CXX_FLAGS " ") # hardcode it here to blank, then try to do same things as in intel.cmake
 if (compile_threaded)
