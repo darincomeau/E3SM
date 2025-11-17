@@ -578,7 +578,6 @@ def buildnml(case, caseroot, compname):
             lines.append('                  type="none"')
             if ocn_grid.startswith("oRRS1") or ocn_grid.startswith("FRIS") \
                     or ocn_grid.startswith("RRSwISC6") or ocn_grid.startswith("ARRMwISC"):
-#                lines.append('                  io_type="pnetcdf,cdf5"')
                 lines.append('                  io_type="{},cdf5"'.format(ocn_pio_typename))
             else:
                 lines.append('                  io_type="{}"'.format(ocn_pio_typename))
@@ -589,7 +588,6 @@ def buildnml(case, caseroot, compname):
             lines.append('                  type="input"')
             if ocn_grid.startswith("oRRS1") or ocn_grid.startswith("FRIS") \
                     or ocn_grid.startswith("RRSwISC6") or ocn_grid.startswith("ARRMwISC"):
-#                lines.append('                  io_type="pnetcdf,cdf5"')
                 lines.append('                  io_type="{},cdf5"'.format(ocn_pio_typename))
             else:
                 lines.append('                  io_type="{}"'.format(ocn_pio_typename))
@@ -612,7 +610,6 @@ def buildnml(case, caseroot, compname):
             lines.append('                  type="input;output"')
             if ocn_grid.startswith("oRRS1") or ocn_grid.startswith("FRIS") \
                     or ocn_grid.startswith("RRSwISC6") or ocn_grid.startswith("ARRMwISC"):
-#                lines.append('                  io_type="pnetcdf,cdf5"')
                 lines.append('                  io_type="{},cdf5"'.format(ocn_pio_typename))
             else:
                 lines.append('                  io_type="{}"'.format(ocn_pio_typename))
@@ -633,7 +630,6 @@ def buildnml(case, caseroot, compname):
             lines.append('        type="output"')
             if ocn_grid.startswith("oRRS1") or ocn_grid.startswith("FRIS") \
                     or ocn_grid.startswith("RRSwISC6") or ocn_grid.startswith("ARRMwISC"):
-#                lines.append('        io_type="pnetcdf,cdf5"')
                 lines.append('        io_type="{},cdf5"'.format(ocn_pio_typename))
             else:
                 lines.append('        io_type="{}"'.format(ocn_pio_typename))
@@ -946,7 +942,6 @@ def buildnml(case, caseroot, compname):
             lines.append('        precision="single"')
             if ocn_grid.startswith("oRRS1") or ocn_grid.startswith("FRIS") \
                     or ocn_grid.startswith("RRSwISC6") or ocn_grid.startswith("ARRMwISC"):
-#                lines.append('        io_type="pnetcdf,cdf5"')
                 lines.append('        io_type="{},cdf5"'.format(ocn_pio_typename))
             else:
                 lines.append('        io_type="{}"'.format(ocn_pio_typename))
@@ -1332,7 +1327,6 @@ def buildnml(case, caseroot, compname):
             lines.append('        precision="single"')
             if ocn_grid.startswith("oRRS1") or ocn_grid.startswith("FRIS") \
                     or ocn_grid.startswith("RRSwISC6") or ocn_grid.startswith("ARRMwISC"):
-#                lines.append('        io_type="pnetcdf,cdf5"')
                 lines.append('        io_type="{},cdf5"'.format(ocn_pio_typename))
             else:
                 lines.append('        io_type="{}"'.format(ocn_pio_typename))
@@ -1570,7 +1564,6 @@ def buildnml(case, caseroot, compname):
             lines.append('        precision="single"')
             if ocn_grid.startswith("oRRS1") or ocn_grid.startswith("FRIS") \
                     or ocn_grid.startswith("RRSwISC6") or ocn_grid.startswith("ARRMwISC"):
-#                lines.append('        io_type="pnetcdf,cdf5"')
                 lines.append('        io_type="{},cdf5"'.format(ocn_pio_typename))
             else:
                 lines.append('        io_type="{}"'.format(ocn_pio_typename))
@@ -1637,7 +1630,6 @@ def buildnml(case, caseroot, compname):
             lines.append('        precision="single"')
             if ocn_grid.startswith("oRRS1") or ocn_grid.startswith("FRIS") \
                     or ocn_grid.startswith("RRSwISC6") or ocn_grid.startswith("ARRMwISC"):
-#                lines.append('        io_type="pnetcdf,cdf5"')
                 lines.append('        io_type="{},cdf5"'.format(ocn_pio_typename))
             else:
                 lines.append('        io_type="{}"'.format(ocn_pio_typename))
@@ -1745,7 +1737,6 @@ def buildnml(case, caseroot, compname):
             lines.append('        type="input;output"')
             if ocn_grid.startswith("oRRS1") or ocn_grid.startswith("FRIS") \
                     or ocn_grid.startswith("RRSwISC6") or ocn_grid.startswith("ARRMwISC"):
-#                lines.append('        io_type="pnetcdf,cdf5"')
                 lines.append('        io_type="{},cdf5"'.format(ocn_pio_typename))
             else:
                 lines.append('        io_type="{}"'.format(ocn_pio_typename))
@@ -1763,7 +1754,6 @@ def buildnml(case, caseroot, compname):
             lines.append('        type="input;output"')
             if ocn_grid.startswith("oRRS1") or ocn_grid.startswith("FRIS") \
                     or ocn_grid.startswith("RRSwISC6") or ocn_grid.startswith("ARRMwISC"):
-#                lines.append('        io_type="pnetcdf,cdf5"')
                 lines.append('        io_type="{},cdf5"'.format(ocn_pio_typename))
             else:
                 lines.append('        io_type="{}"'.format(ocn_pio_typename))
@@ -1781,7 +1771,6 @@ def buildnml(case, caseroot, compname):
             lines.append('        type="input;output"')
             if ocn_grid.startswith("oRRS1") or ocn_grid.startswith("FRIS") \
                     or ocn_grid.startswith("RRSwISC6") or ocn_grid.startswith("ARRMwISC"):
-#                lines.append('        io_type="pnetcdf,cdf5"')
                 lines.append('        io_type="{},cdf5"'.format(ocn_pio_typename))
             else:
                 lines.append('        io_type="{}"'.format(ocn_pio_typename))
