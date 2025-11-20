@@ -67,6 +67,7 @@
       <value mach="chicoma-gpu">netcdf</value>
       <value mach="bebop" mpilib="impi" compset=".*CAM5.+MPAS.*">netcdf</value>
       <value mach="fugaku" compiler="gnu">netcdf</value>
+      <value mach="barfoot">netcdf</value>
     </values>
   </entry>
 
@@ -280,6 +281,7 @@
     <values>
       <value mach="onyx">netcdf</value>
       <value mach="carpenter">netcdf</value>
+      <value mach="barfoot">netcdf</value>
       <value mach="blueback">netcdf</value>
       <value mach="narwhal">netcdf</value>
       <value mach="warhawk">netcdf</value>

@@ -617,7 +617,7 @@
     </mach>
   </grid>
   <grid name="a%T62.+oi%ARRMwISC3to18|a%TL319.+oi%ARRMwISC3to18">
-    <mach name="carpenter|blueback">
+    <mach name="carpenter|blueback|barfoot">
       <pes compset=".*MPASCICE.+MPASO.+|.*MPASSI.+MPASO.+" pesize="any">
         <comment>none</comment>
         <ntasks>
@@ -654,7 +654,7 @@
     </mach>
   </grid>
   <grid name="a%T62.+oi%ARRMwISC3to18|a%TL319.+oi%ARRMwISC3to18">
-    <mach name="carpenter|blueback">
+    <mach name="carpenter|blueback|barfoot">
       <pes compset=".*MPASCICE.+MPASO.+|.*MPASSI.+MPASO.+" pesize="M1">
         <comment>none</comment>
         <ntasks>
@@ -728,7 +728,7 @@
     </mach>
   </grid>
   <grid name="a%T62.+oi%ARRMwISC2p4to18|a%TL319.+oi%ARRMwISC2p4to18">
-    <mach name="carpenter|blueback">
+    <mach name="carpenter|blueback|barfoot">
       <pes compset=".*MPASCICE.+MPASO.+|.*MPASSI.+MPASO.+" pesize="S1">
         <comment>none</comment>
         <ntasks>
@@ -765,7 +765,7 @@
     </mach>
   </grid>
   <grid name="a%T62.+oi%ARRMwISC2p4to18|a%TL319.+oi%ARRMwISC2p4to18">
-    <mach name="carpenter|blueback">
+    <mach name="carpenter|blueback|barfoot">
       <pes compset=".*MPASCICE.+MPASO.+|.*MPASSI.+MPASO.+" pesize="any">
         <comment>none</comment>
         <ntasks>
@@ -802,7 +802,7 @@
     </mach>
   </grid>
   <grid name="a%T62.+oi%ARRMwISC2p4to18|a%TL319.+oi%ARRMwISC2p4to18">
-    <mach name="carpenter|blueback">
+    <mach name="carpenter|blueback|barfoot">
       <pes compset=".*MPASCICE.+MPASO.+|.*MPASSI.+MPASO.+" pesize="L1">
         <comment>none</comment>
         <ntasks>
@@ -839,7 +839,7 @@
     </mach>
   </grid>
   <grid name="a%T62.+oi%ARRMwISC2p4to18|a%TL319.+oi%ARRMwISC2p4to18">
-    <mach name="carpenter|blueback">
+    <mach name="carpenter|blueback|barfoot">
       <pes compset=".*MPASCICE.+MPASO.+|.*MPASSI.+MPASO.+" pesize="X1">
         <comment>none</comment>
         <ntasks>
