@@ -5740,6 +5740,7 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
         <command name="rm">PrgEnv-gnu</command>
         <command name="rm">PrgEnv-pgi</command>
         <command name="rm">intel</command>
+        <command name="rm">intel-classic</command>
         <command name="rm">cce</command>
         <command name="rm">gcc</command>
         <command name="rm">cray-parallel-netcdf</command>
@@ -5762,7 +5763,8 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
       <modules compiler="intel">
         <command name="load">PrgEnv-intel/8.6.0</command>
         <command name="rm">intel</command>
-        <command name="load">intel/2023.0.0</command>
+        <command name="rm">intel-classic</command>
+        <command name="load">intel-classic/2023.0.0</command>
         <command name="rm">cray-mpich</command>
         <command name="load">cray-mpich/8.1.32</command>
         <command name="rm">cray-hdf5</command>
@@ -5770,23 +5772,26 @@ AMD EPYC 7713 64-Core (Milan) (256GB) and 4 nvidia A100'</DESC>
         <command name="rm">cray-netcdf-hdf5parallel</command>
         <command name="rm">cray-parallel-netcdf</command>
         <command name="rm">netcdf</command>
+        <command name="load">netcdf/4.9.3-intel-classic-2023.0.0-nompi</command>
       </modules>
     </module_system>
     <RUNDIR>$CIME_OUTPUT_ROOT/$CASE/run</RUNDIR>
     <EXEROOT>$CIME_OUTPUT_ROOT/$CASE/bld</EXEROOT>
     <TEST_TPUT_TOLERANCE>0.1</TEST_TPUT_TOLERANCE>
     <environment_variables>
-      <env name="NETCDF_PATH">/p/app/unsupported/netcdf/4.9.2-intel-2023.0.0</env>
       <!--
+      <env name="NETCDF_PATH">/p/app/unsupported/netcdf/4.9.2-intel-2023.0.0</env>
       <env name="PNETCDF_PATH">$ENV{PNETCDF_DIR}</env>
+      <env name="NETCDF_DIR">/p/app/unsupported/netcdf/4.9.2-intel-2023.0.0</env>
+      <env name="LD_LIBRARY_PATH">/app/unsupported/netcdf/4.9.2-intel-2023.0.0/lib:/app/unsupported/netcdf/4.9.2-intel-2023.0.0/lib:/app/unsupported/hdf5/1.14.3-intel-2023.0.0/lib:/app/unsupported/hdf4/4.2.16-2-nonetcdf-intel-2023.0.0/lib:/app/unsupported/szip/2.1.1-intel-2023.0.0/lib:/p/app/intel/oneapi_2023.0.0/mkl/2023.0.0/lib/intel64:$ENV{LD_LIBRARY_PATH}</env>
       -->
       <!-- cmake configure fails on hdf5 checks for unknown reasons-->
+      <env name="NETCDF_PATH">$ENV{NETCDF_DIR}</env>
+      <env name="LD_LIBRARY_PATH">/app/unsupported/hdf5/hdf5-1.14.0-intel-classic-2023.0.0-nompi/lib:/app/unsupported/szip/2.1.1-intel-2023.0.0/lib:/p/app/intel/oneapi_2023.0.0/mkl/2023.0.0/lib/intel64:$ENV{LD_LIBRARY_PATH}</env>
       <env name="HDF5_ROOT"/>
       <env name="MPICH_ENV_DISPLAY">1</env>
       <env name="MPICH_VERSION_DISPLAY">1</env>
       <env name="FI_CXI_RX_MATCH_MODE">software</env>
-      <env name="NETCDF_DIR">/p/app/unsupported/netcdf/4.9.2-intel-2023.0.0</env>
-      <env name="LD_LIBRARY_PATH">/app/unsupported/netcdf/4.9.2-intel-2023.0.0/lib:/app/unsupported/netcdf/4.9.2-intel-2023.0.0/lib:/app/unsupported/hdf5/1.14.3-intel-2023.0.0/lib:/app/unsupported/hdf4/4.2.16-2-nonetcdf-intel-2023.0.0/lib:/app/unsupported/szip/2.1.1-intel-2023.0.0/lib:/p/app/intel/oneapi_2023.0.0/mkl/2023.0.0/lib/intel64:$ENV{LD_LIBRARY_PATH}</env>
       <!--env name="MPICH_CPUMASK_DISPLAY">1</env-->
 
       <env name="OMP_STACKSIZE">64M</env>
