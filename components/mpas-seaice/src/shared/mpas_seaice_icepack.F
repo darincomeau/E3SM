@@ -3544,7 +3544,6 @@ subroutine init_column_waves(domain)
                  tracerArrayCategory, iCell, setGetPhysicsTracers, setGetBGCTracers)
 
           call icepack_step_wavefracture(&
-                  wave_spec_type = config_wave_spec_type, &
                   dt = dynamicsTimeStep, &
                   nfreq = nFrequencies, &
                   aice = iceAreaCell(iCell), &
@@ -3554,7 +3553,8 @@ subroutine init_column_waves(domain)
                   wavefreq = waveFrequency(:), &
                   dwavefreq = waveFreqBinWidth(:), &
                   trcrn = tracerArrayCategory, &
-                  d_afsd_wave = dFloeSizeWaves(:,iCell))
+                  d_afsd_wave = dFloeSizeWaves(:,iCell), &
+                  wave_height = significantWaveHeight(iCell) )
 
           call get_cice_tracer_array_category(block, ciceTracerObject, &
                  tracerArrayCategory, iCell, setGetPhysicsTracers, setGetBGCTracers)
