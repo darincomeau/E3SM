@@ -6,9 +6,9 @@ endif()
 #set(MPICC "cc")
 #set(MPICXX "CC")
 #set(MPIFC "ftn")
-#set(SCC "icx")
+set(SCC "icx")
 set(SCXX "icpx")
-#set(SFC "ifx")
+set(SFC "ifx")
 
 # fp-model source does not work on in mpicxx, this seems to be a compiler bug, need to manually switch to precise
 set(CMAKE_CXX_FLAGS " ") # hardcode it here to blank, then try to do same things as in intel.cmake
@@ -16,12 +16,26 @@ if (compile_threaded)
   string(APPEND CMAKE_CXX_FLAGS " -qopenmp")
 endif()
 string(APPEND CMAKE_CXX_FLAGS_DEBUG " -O0 -g")
-string(APPEND CMAKE_CXX_FLAGS_RELEASE " -O2")
-string(APPEND CMAKE_CXX_FLAGS " -fp-model=precise") # and manually add precise
+
+# Check for Intel LLVM (ifx) version 2025 or newer
+if (CMAKE_Fortran_COMPILER_ID STREQUAL "IntelLLVM")
+    if (CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL "2025.0")
+        string(APPEND CMAKE_Fortran_FLAGS_DEBUG " -check nouninit") # Applying Intel 2025.3 sanitization workaround
+    endif()
+endif()
+
+#string(APPEND CMAKE_CXX_FLAGS " -fp-model=precise") # and manually add precise
 #message(STATUS "ndk CXXFLAGS=${CXXFLAGS}")
 
-string(APPEND CMAKE_Fortran_FLAGS " -fp-model consistent -fimf-use-svml")
+string(APPEND CMAKE_CXX_FLAGS_RELEASE " -O2")
+#string(APPEND CMAKE_CXX_FLAGS " -fp-model=precise") # and manually add precise
 string(APPEND CMAKE_CXX_FLAGS " -fp-model consistent")
-string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -qno-opt-dynamic-align")
-string(APPEND CMAKE_EXE_LINKER_FLAGS " -lpthread")
-string(APPEND SPIO_CMAKE_OPTS " -DPIO_ENABLE_TOOLS:BOOL=OFF")
+string(APPEND CMAKE_Fortran_FLAGS " -fp-model consistent -fimf-use-svml")
+
+string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -g -traceback")
+string(APPEND CMAKE_Fortran_FLAGS " -DHAVE_ERF_INTRINSICS")
+string(APPEND CMAKE_CXX_FLAGS " -fp-model=consistent")
+
+#string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -qno-opt-dynamic-align")
+#string(APPEND CMAKE_EXE_LINKER_FLAGS " -lpthread")
+#string(APPEND SPIO_CMAKE_OPTS " -DPIO_ENABLE_TOOLS:BOOL=OFF")
